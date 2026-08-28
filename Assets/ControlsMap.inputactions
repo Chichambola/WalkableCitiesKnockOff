@@ -1,0 +1,34 @@
+{
+    "name": "Controls",
+    "maps": [
+        {
+            "name": "Controls",
+            "id": "6b66b18c-4916-4147-b842-6ca492716bc5",
+            "actions": [
+                {
+                    "name": "ChangeFoot",
+                    "type": "Button",
+                    "id": "c0aabcb5-daae-4172-a472-95cfb396b807",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "93dd9f93-dbb1-42ab-9703-5e6aebe6b7ae",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeFoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
