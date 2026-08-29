@@ -35,6 +35,15 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Restart"",
+                    ""type"": ""Button"",
+                    ""id"": ""5167f305-fa3a-431a-b047-b7bfea596aa6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -48,6 +57,17 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
                     ""action"": ""ChangeFoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2d45ece1-447c-45ee-b02f-1da0a99fbd2d"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Restart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -57,6 +77,7 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
         // Controls
         m_Controls = asset.FindActionMap("Controls", throwIfNotFound: true);
         m_Controls_ChangeFoot = m_Controls.FindAction("ChangeFoot", throwIfNotFound: true);
+        m_Controls_Restart = m_Controls.FindAction("Restart", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -119,11 +140,13 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Controls;
     private List<IControlsActions> m_ControlsActionsCallbackInterfaces = new List<IControlsActions>();
     private readonly InputAction m_Controls_ChangeFoot;
+    private readonly InputAction m_Controls_Restart;
     public struct ControlsActions
     {
         private @ControlsMap m_Wrapper;
         public ControlsActions(@ControlsMap wrapper) { m_Wrapper = wrapper; }
         public InputAction @ChangeFoot => m_Wrapper.m_Controls_ChangeFoot;
+        public InputAction @Restart => m_Wrapper.m_Controls_Restart;
         public InputActionMap Get() { return m_Wrapper.m_Controls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -136,6 +159,9 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
             @ChangeFoot.started += instance.OnChangeFoot;
             @ChangeFoot.performed += instance.OnChangeFoot;
             @ChangeFoot.canceled += instance.OnChangeFoot;
+            @Restart.started += instance.OnRestart;
+            @Restart.performed += instance.OnRestart;
+            @Restart.canceled += instance.OnRestart;
         }
 
         private void UnregisterCallbacks(IControlsActions instance)
@@ -143,6 +169,9 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
             @ChangeFoot.started -= instance.OnChangeFoot;
             @ChangeFoot.performed -= instance.OnChangeFoot;
             @ChangeFoot.canceled -= instance.OnChangeFoot;
+            @Restart.started -= instance.OnRestart;
+            @Restart.performed -= instance.OnRestart;
+            @Restart.canceled -= instance.OnRestart;
         }
 
         public void RemoveCallbacks(IControlsActions instance)
@@ -163,5 +192,6 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
     public interface IControlsActions
     {
         void OnChangeFoot(InputAction.CallbackContext context);
+        void OnRestart(InputAction.CallbackContext context);
     }
 }

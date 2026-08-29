@@ -1,5 +1,5 @@
 {
-    "name": "Controls",
+    "name": "ControlsMap",
     "maps": [
         {
             "name": "Controls",
@@ -9,6 +9,15 @@
                     "name": "ChangeFoot",
                     "type": "Button",
                     "id": "c0aabcb5-daae-4172-a472-95cfb396b807",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Restart",
+                    "type": "Button",
+                    "id": "5167f305-fa3a-431a-b047-b7bfea596aa6",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -24,6 +33,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ChangeFoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2d45ece1-447c-45ee-b02f-1da0a99fbd2d",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Restart",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

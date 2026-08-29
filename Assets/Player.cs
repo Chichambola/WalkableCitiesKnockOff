@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private FeetHandler _feetHandler;
     [SerializeField] private Rotator _rotator;
+
+    public event Action RequestedRestart;
     
     private Rigidbody2D _rigidbody;
 
@@ -20,19 +22,25 @@ public class Player : MonoBehaviour
     private void OnEnable()
     {
         _inputReader.ChangeKeyPressed += OnChangeKeyPressed;
+        _inputReader.ResetPressed += OnResetPressed;
     }
-
+    
     private void OnDisable()
     {
         _inputReader.ChangeKeyPressed -= OnChangeKeyPressed;
+        _inputReader.ResetPressed -= OnResetPressed;
     }
 
     private void OnChangeKeyPressed()
     {
-        Vector3 value = _feetHandler.ChangeFoot();
-
-        var centerOfMass = new Vector2(value.x, value.y);
+        _rigidbody.Sleep();
         
-        _rigidbody.centerOfMass = centerOfMass;
+        Vector3 value = _feetHandler.GetPosition();
+        _rotator.SetPoint(value);
+        _rotator.SwitchDirection();
+        
+        _rigidbody.WakeUp();
     }
+
+    private void OnResetPressed() => RequestedRestart?.Invoke();
 }

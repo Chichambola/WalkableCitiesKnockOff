@@ -9,6 +9,7 @@ public class InputReader : MonoBehaviour
     private ControlsMap _controlsMap;
 
     public event Action ChangeKeyPressed;
+    public event Action ResetPressed;
 
     private void Awake()
     {
@@ -28,8 +29,9 @@ public class InputReader : MonoBehaviour
     private void Update()
     {
         if (_controlsMap.Controls.ChangeFoot.WasPressedThisFrame())
-        {
             ChangeKeyPressed?.Invoke();
-        }
+
+        if (_controlsMap.Controls.Restart.WasPressedThisFrame())
+            ResetPressed?.Invoke();
     }
 }
