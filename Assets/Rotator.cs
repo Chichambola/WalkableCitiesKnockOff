@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -18,6 +19,11 @@ public class Rotator : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        SwitchDirection();
+    }
+
     private void FixedUpdate()
     {
         if (!_rigidbody.IsSleeping())
@@ -25,8 +31,8 @@ public class Rotator : MonoBehaviour
             _rigidbody.transform.RotateAround(_rotatePoint, _spinDirection, _spinSpeed * Time.fixedDeltaTime);
         }
     }
-
-    public void SwitchDirection()
+    
+    public void SwitchPosition()
     {
         if (_isFlipped)
         {
@@ -41,4 +47,9 @@ public class Rotator : MonoBehaviour
     }
     
     public void SetPoint(Vector3 point) => _rotatePoint = point;
+    
+    private void SwitchDirection()
+    {
+        _spinDirection = _spinDirection == Vector3.back ? Vector3.forward : Vector3.back;
+    }
 }

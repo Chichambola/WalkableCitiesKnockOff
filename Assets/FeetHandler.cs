@@ -36,25 +36,4 @@ public class FeetHandler : MonoBehaviour
             return _leftFoot.transform.position;
         }
     }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(_rightFoot.transform.position, 0.3f);
-        
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(_leftFoot.transform.position, 0.3f);
-    }
-
-    public Vector3 GetDirection()
-    {
-        if (_rightFoot.IsActive)
-        {
-            return _rightFoot.transform.position;
-        }
-        else
-        {
-            return _leftFoot.transform.position;
-        }
-    }
 }

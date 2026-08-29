@@ -19,6 +19,11 @@ public class Player : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 
+    private void OnValidate()
+    {
+        GetComponent<Rigidbody2D>().gravityScale = 0;
+    }
+
     private void OnEnable()
     {
         _inputReader.ChangeKeyPressed += OnChangeKeyPressed;
@@ -31,13 +36,14 @@ public class Player : MonoBehaviour
         _inputReader.ResetPressed -= OnResetPressed;
     }
 
+    
     private void OnChangeKeyPressed()
     {
         _rigidbody.Sleep();
         
         Vector3 value = _feetHandler.GetPosition();
         _rotator.SetPoint(value);
-        _rotator.SwitchDirection();
+        _rotator.SwitchPosition();
         
         _rigidbody.WakeUp();
     }
