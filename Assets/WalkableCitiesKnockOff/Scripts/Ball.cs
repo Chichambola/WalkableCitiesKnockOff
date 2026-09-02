@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class Ball : BasicObject, IKickable, ISoundOwner
 {
-    [SerializeField] private List<AudioClip> _sounds;
-
-    public List<AudioClip> Sounds => _sounds;
+    [SerializeField] private SoundHandler _soundHandler;
+    
+    public AudioClip GetSound() => _soundHandler.GetSound(); 
 
     public void ChangeDirection(Vector2 directionForce)
     {

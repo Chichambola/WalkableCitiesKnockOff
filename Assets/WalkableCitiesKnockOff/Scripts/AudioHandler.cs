@@ -13,7 +13,6 @@ public class AudioHandler : MonoBehaviour
     [SerializeField] private float _volume;
 
     private IPlayer _player;
-    private List<AudioClip> _sounds;
     
     private void Awake()
     {
@@ -32,10 +31,8 @@ public class AudioHandler : MonoBehaviour
 
     private void PlaySound(ISoundOwner soundOwner)
     {
-        _sounds = soundOwner.Sounds.ToList();
+        var sound = soundOwner.GetSound();
         
-        int randomIndex = Random.Range(0, _sounds.Count);
-            
-        AudioSource.PlayClipAtPoint(_sounds[randomIndex], _player.CurrentPosition, _volume);
+        AudioSource.PlayClipAtPoint(sound, _player.CurrentPosition, _volume);
     }
 }

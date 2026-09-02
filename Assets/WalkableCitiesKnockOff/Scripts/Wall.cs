@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Wall : BasicObject, ISoundOwner
 {
-    [SerializeField] private List<AudioClip> _sounds;
-
-    public List<AudioClip> Sounds => _sounds;
+    [SerializeField] private SoundHandler _soundHandler;
+    public AudioClip GetSound() => _soundHandler.GetSound();
 }
