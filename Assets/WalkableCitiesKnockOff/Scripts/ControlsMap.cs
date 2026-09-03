@@ -34,11 +34,11 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Restart"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""5167f305-fa3a-431a-b047-b7bfea596aa6"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -49,22 +49,22 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""93dd9f93-dbb1-42ab-9703-5e6aebe6b7ae"",
+                    ""id"": ""59e8f858-6dd1-4006-99af-42bc539cbbf7"",
                     ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""New control scheme"",
                     ""action"": ""ChangeFoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""2d45ece1-447c-45ee-b02f-1da0a99fbd2d"",
+                    ""id"": ""5e5734e9-78d2-4898-bc6d-a5b0b2f82c4d"",
                     ""path"": ""<Keyboard>/r"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""New control scheme"",
                     ""action"": ""Restart"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -72,7 +72,19 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
             ]
         }
     ],
-    ""controlSchemes"": []
+    ""controlSchemes"": [
+        {
+            ""name"": ""New control scheme"",
+            ""bindingGroup"": ""New control scheme"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        }
+    ]
 }");
         // Controls
         m_Controls = asset.FindActionMap("Controls", throwIfNotFound: true);
@@ -189,6 +201,15 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
         }
     }
     public ControlsActions @Controls => new ControlsActions(this);
+    private int m_NewcontrolschemeSchemeIndex = -1;
+    public InputControlScheme NewcontrolschemeScheme
+    {
+        get
+        {
+            if (m_NewcontrolschemeSchemeIndex == -1) m_NewcontrolschemeSchemeIndex = asset.FindControlSchemeIndex("New control scheme");
+            return asset.controlSchemes[m_NewcontrolschemeSchemeIndex];
+        }
+    }
     public interface IControlsActions
     {
         void OnChangeFoot(InputAction.CallbackContext context);
