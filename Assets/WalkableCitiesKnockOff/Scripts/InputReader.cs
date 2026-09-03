@@ -29,19 +29,16 @@ public class InputReader : MonoBehaviour
 
     private void OnDisable()
     {
+        _controlsMap.Controls.ChangeFoot.performed -= OnChangeFoot;
+        
         _controlsMap.Disable();
     }
     
     private void OnChangeFoot(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && ctx.ReadValue<float>() >= 0.9f)
+        if (ctx.performed)
         {
-            Debug.Log("1");
-        }
-
-        if (ctx.started)
-        {
-            Debug.Log("2");
+            ChangeKeyPressed?.Invoke();
         }
     }
     
@@ -56,10 +53,5 @@ public class InputReader : MonoBehaviour
 
         if (_controlsMap.Controls.Restart.WasPressedThisFrame())
             ResetPressed?.Invoke();
-    }
-
-    private void ChangeFootPerformed(InputAction.CallbackContext obj)
-    {
-        ChangeKeyPressed?.Invoke();
     }
 }
