@@ -10,7 +10,7 @@ public abstract class BasicObject : MonoBehaviour
     protected Rigidbody2D Rigidbody;
     private Collider _collider;
     
-    private void Awake()
+    protected virtual void Awake()
     {
         Rigidbody = GetComponent<Rigidbody2D>();
         _collider = GetComponent<Collider>();

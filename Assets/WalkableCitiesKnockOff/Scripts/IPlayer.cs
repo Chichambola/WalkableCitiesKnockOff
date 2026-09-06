@@ -7,4 +7,7 @@ public interface IPlayer
 {
     public event Action<ISoundOwner> HitSoundOwner; 
     public Vector2 CurrentPosition { get; }
+    public bool IsAccepting { get; }
+    public string AcceptButton { get; }
+    public string RestartButton { get; }
 }

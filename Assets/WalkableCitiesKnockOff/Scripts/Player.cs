@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -15,12 +16,19 @@ public class Player : MonoBehaviour, IPlayer
     [SerializeField] private Transform _body;
 
     public event Action RequestedRestart;
-    public event Action<ISoundOwner> HitSoundOwner; 
+    public event Action<ISoundOwner> HitSoundOwner;
+    public event Action PressedKey; 
     
     private Rigidbody2D _rigidbody;
     private float _count;
+    private bool _isFrozen;
 
     public Vector2 CurrentPosition => transform.position;
+    public bool IsAccepting => _inputReader.IsHoldingAccept;
+    public bool HasPressedKey { get; private set; }
+    public string AcceptButton => _inputReader.AcceptButton;
+    public string RestartButton => _inputReader.RestartButton;
+    public string ChangeFootButton => _inputReader.ChangeFootButton;
 
     private void Awake()
     {
@@ -35,26 +43,64 @@ public class Player : MonoBehaviour, IPlayer
 
     private void OnEnable()
     {
-        _inputReader.ChangeKeyPressed += OnChangeKeyPressed;
+        SubscribeEvents();
+
         _inputReader.ResetPressed += OnResetPressed;
+        
+        HasPressedKey = false;
+        _isFrozen = false;
+    }
+
+    private void OnDisable()
+    {
+        if (!_isFrozen)
+        {
+            UnsubscribeEvents();
+        }
+        
+        _inputReader.ResetPressed -= OnResetPressed;
+    }
+
+    private void UnsubscribeEvents()
+    {
+        _inputReader.ChangeKeyPressed -= OnChangeKeyPressed;
+        _collisionHandler.HitKickable -= OnHitKickable;
+        _collisionHandler.HitWall -= OnHitWall;
+        _collisionHandler.HitManyCollisons -= OnHitManyCollisions;
+        _collisionHandler.HitSoundOwner -= OnHitSoundOwner;
+    }
+    
+    private void SubscribeEvents()
+    {
+        _inputReader.ChangeKeyPressed += OnChangeKeyPressed;
         _collisionHandler.HitKickable += OnHitKickable;
         _collisionHandler.HitWall += OnHitWall;
         _collisionHandler.HitManyCollisons += OnHitManyCollisions;
         _collisionHandler.HitSoundOwner += OnHitSoundOwner;
     }
 
-    private void OnDisable()
+    public void Freeze()
     {
-        _inputReader.ChangeKeyPressed -= OnChangeKeyPressed;
-        _inputReader.ResetPressed -= OnResetPressed;
-        _collisionHandler.HitKickable -= OnHitKickable;
-        _collisionHandler.HitWall -= OnHitWall;
-        _collisionHandler.HitManyCollisons -= OnHitManyCollisions;
-        _collisionHandler.HitSoundOwner -= OnHitSoundOwner;
+        _isFrozen = true;
+        
+        UnsubscribeEvents();
     }
 
+    public void UnFreeze()
+    {
+        _isFrozen = false;
+        
+        SubscribeEvents();
+    }
+    
     private void OnChangeKeyPressed()
     {
+        if (!HasPressedKey)
+        {
+            HasPressedKey = true;
+            PressedKey?.Invoke();   
+        }
+        
         _rigidbody.Sleep();
         
         Vector3 value = _feetHandler.GetPosition();

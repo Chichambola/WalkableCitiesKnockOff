@@ -44,6 +44,15 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Accept"",
+                    ""type"": ""Value"",
+                    ""id"": ""3bcdb66e-220e-457b-8ebd-cbe149f9de9d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -68,6 +77,17 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
                     ""action"": ""Restart"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a8075672-469c-470a-8bdc-7f410edef1d8"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.5)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Accept"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -90,6 +110,7 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
         m_Controls = asset.FindActionMap("Controls", throwIfNotFound: true);
         m_Controls_ChangeFoot = m_Controls.FindAction("ChangeFoot", throwIfNotFound: true);
         m_Controls_Restart = m_Controls.FindAction("Restart", throwIfNotFound: true);
+        m_Controls_Accept = m_Controls.FindAction("Accept", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -153,12 +174,14 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
     private List<IControlsActions> m_ControlsActionsCallbackInterfaces = new List<IControlsActions>();
     private readonly InputAction m_Controls_ChangeFoot;
     private readonly InputAction m_Controls_Restart;
+    private readonly InputAction m_Controls_Accept;
     public struct ControlsActions
     {
         private @ControlsMap m_Wrapper;
         public ControlsActions(@ControlsMap wrapper) { m_Wrapper = wrapper; }
         public InputAction @ChangeFoot => m_Wrapper.m_Controls_ChangeFoot;
         public InputAction @Restart => m_Wrapper.m_Controls_Restart;
+        public InputAction @Accept => m_Wrapper.m_Controls_Accept;
         public InputActionMap Get() { return m_Wrapper.m_Controls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -174,6 +197,9 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
             @Restart.started += instance.OnRestart;
             @Restart.performed += instance.OnRestart;
             @Restart.canceled += instance.OnRestart;
+            @Accept.started += instance.OnAccept;
+            @Accept.performed += instance.OnAccept;
+            @Accept.canceled += instance.OnAccept;
         }
 
         private void UnregisterCallbacks(IControlsActions instance)
@@ -184,6 +210,9 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
             @Restart.started -= instance.OnRestart;
             @Restart.performed -= instance.OnRestart;
             @Restart.canceled -= instance.OnRestart;
+            @Accept.started -= instance.OnAccept;
+            @Accept.performed -= instance.OnAccept;
+            @Accept.canceled -= instance.OnAccept;
         }
 
         public void RemoveCallbacks(IControlsActions instance)
@@ -214,5 +243,6 @@ public partial class @ControlsMap: IInputActionCollection2, IDisposable
     {
         void OnChangeFoot(InputAction.CallbackContext context);
         void OnRestart(InputAction.CallbackContext context);
+        void OnAccept(InputAction.CallbackContext context);
     }
 }
