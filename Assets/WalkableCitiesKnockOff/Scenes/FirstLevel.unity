@@ -442,7 +442,6 @@ GameObject:
   m_Component:
   - component: {fileID: 592059434}
   - component: {fileID: 592059433}
-  - component: {fileID: 592059432}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -450,14 +449,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &592059432
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 592059431}
-  m_Enabled: 1
 --- !u!20 &592059433
 Camera:
   m_ObjectHideFlags: 0
@@ -1553,7 +1544,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 93
   m_TargetDisplay: 0
 --- !u!224 &1660180082
 RectTransform:

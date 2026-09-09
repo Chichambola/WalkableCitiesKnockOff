@@ -75,7 +75,7 @@ public class SliderHandler : MonoBehaviour
             _slidersSettings.endValue = value;
             Tween.UISliderValue(_slider, _slidersSettings);
 
-            await UniTask.Delay(TimeSpan.Zero, true, cancellationToken: token).SuppressCancellationThrow();
+            await UniTask.Delay(TimeSpan.Zero, true, cancellationToken: token);
         }
         
         _cts?.Cancel();
