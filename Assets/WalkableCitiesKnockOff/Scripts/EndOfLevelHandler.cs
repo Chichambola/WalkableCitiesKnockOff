@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using PrimeTween;
 using TMPro;
@@ -11,6 +12,7 @@ using Slider = UnityEngine.UI.Slider;
 
 public class EndOfLevelHandler : BasicObject
 {
+    [SerializeField] private InterfaceReference<IPlayer, MonoBehaviour> _playerPrefab;
     [SerializeField] private TextMeshProUGUI _text;
     [SerializeField] private SliderHandler _sliderHandler;
     
@@ -22,11 +24,8 @@ public class EndOfLevelHandler : BasicObject
         base.Awake();
 
         _text.text = "";
-    }
-
-    public void Init(IPlayer player)
-    {
-        _player = player ?? throw new Exception();
+        
+        _player = _playerPrefab.Value ?? throw new Exception();
     }
 
     private void OnTriggerEnter2D(Collider2D other)

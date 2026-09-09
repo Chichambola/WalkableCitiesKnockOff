@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using PrimeTween;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,73 +11,75 @@ using UnityEngine.Serialization;
 public class Game : MonoBehaviour
 {
     [SerializeField] private Player _playerPrefab;
-    [SerializeField] private TextMeshProUGUI _firstText;
-    [SerializeField] private EndOfLevelHandler _levelHandler;
     [SerializeField] private SceneHandler _sceneHandler;
+    [SerializeField] private TextMeshProUGUI _scoreText;
 
-    private static float _normalTime = 1f;
-    private static float _slowTime = 0.000001f;
-    private static Player _player;
-    private static Game Instance;
+    private static float s_normalTime = 1f;
+    private static float s_slowTime = 0.000001f;
+    private static Player s_player;
+    private static Game s_Instance;
+    private int _tweenCapacity = 3000;
     
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (s_Instance != null && s_Instance != this)
         {
             Destroy(gameObject);
             return;
         }
         
-        Instance = this;
-    }
-
-    private void OnEnable()
-    {
-        Time.timeScale = _normalTime;
-        
-        _player = _playerPrefab;
-        _player.RequestedRestart += Restart;
-        _player.PressedKey += OnPressedKey;
-        
-        _levelHandler.Init(_player);
-    }
-
-    private void OnDisable()
-    {
-        _player.RequestedRestart -= Restart;
-
-        if (!_player.HasPressedKey)
-            _player.PressedKey -= OnPressedKey;
+        s_Instance = this;
     }
 
     private void Start()
     {
-        _firstText.text = $"Press {_player.ChangeFootButton.ToUpper()} to start.";
+        _scoreText.SetText($"Score: {StepCounter.Score}");
+        
+        PrimeTweenConfig.SetTweensCapacity(_tweenCapacity);
     }
 
+    private void OnEnable()
+    {
+        Time.timeScale = s_normalTime;
+        
+        s_player = _playerPrefab;
+        s_player.RequestedRestart += Restart;
+        s_player.Stepped += OnPlayerStepped;
+    }
+
+    private void OnDisable()
+    {
+        s_player.RequestedRestart -= Restart;
+        s_player.Stepped -= OnPlayerStepped;
+        
+        StepCounter.Reset();
+    }
+    
     public static void Pause()
     {
-        Time.timeScale = _slowTime;
+        Time.timeScale = s_slowTime;
         
-        _player.Freeze();
+        s_player.Freeze();
     }
 
     public static void Resume()
     {
-        Time.timeScale = _normalTime;
+        Time.timeScale = s_normalTime;
         
-        _player.UnFreeze();
-    }
-    
-    private void OnPressedKey()
-    {
-        _firstText.text = "";
-
-        _playerPrefab.PressedKey -= OnPressedKey;
+        s_player.UnFreeze();
     }
     
     private void Restart()
     {
+        StepCounter.Reset();
+        
         _sceneHandler.Restart();
+    }
+    
+    private void OnPlayerStepped()
+    {
+        StepCounter.Increment();
+        
+        _scoreText.text = $"Score: {StepCounter.Score}";
     }
 }

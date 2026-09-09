@@ -17,7 +17,7 @@ public class Player : MonoBehaviour, IPlayer
 
     public event Action RequestedRestart;
     public event Action<ISoundOwner> HitSoundOwner;
-    public event Action PressedKey; 
+    public event Action Stepped;
     
     private Rigidbody2D _rigidbody;
     private float _count;
@@ -95,12 +95,6 @@ public class Player : MonoBehaviour, IPlayer
     
     private void OnChangeKeyPressed()
     {
-        if (!HasPressedKey)
-        {
-            HasPressedKey = true;
-            PressedKey?.Invoke();   
-        }
-        
         _rigidbody.Sleep();
         
         Vector3 value = _feetHandler.GetPosition();
@@ -108,6 +102,8 @@ public class Player : MonoBehaviour, IPlayer
         _rotator.SwitchPosition();
         
         _rigidbody.WakeUp();
+        
+        Stepped?.Invoke();
         
         var soundOwner = _soundVerifier.DetermineSound(value);
 

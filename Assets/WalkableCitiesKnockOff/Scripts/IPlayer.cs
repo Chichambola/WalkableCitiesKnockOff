@@ -10,4 +10,5 @@ public interface IPlayer
     public bool IsAccepting { get; }
     public string AcceptButton { get; }
     public string RestartButton { get; }
+    public string ChangeFootButton { get; }
 }
