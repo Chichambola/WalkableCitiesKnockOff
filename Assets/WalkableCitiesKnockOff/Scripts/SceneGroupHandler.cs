@@ -101,7 +101,7 @@ public class SceneGroupHandler
             
             operationGroup.Add(operation);
             
-            SceneLoaded?.Invoke(scene);
+            SceneUnloaded?.Invoke(scene);
         }
         
         while (!operationGroup.IsDone)

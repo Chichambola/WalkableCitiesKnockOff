@@ -52,6 +52,9 @@ public class SceneLoader : MonoBehaviour
     private void OnDisable()
     {
         _progress.Progressed -= OnLoadingProgressed;
+        _groupHandler.SceneLoaded -= OnSceneLoaded;
+        _groupHandler.SceneUnloaded -= OnSceneUnloaded;
+        _groupHandler.Loaded -= OnHandlerUnloaded;
     }
 
     private async UniTask LoadSceneGroup(int index)

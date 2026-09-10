@@ -5,14 +5,14 @@ using PrimeTween;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 public class Game : MonoBehaviour
 {
     [SerializeField] private Player _playerPrefab;
-    [SerializeField] private SceneHandler _sceneHandler;
-    [SerializeField] private TextMeshProUGUI _scoreText;
+    [SerializeField] private ScoreHandler _scoreHandler;
 
     private static float s_normalTime = 1f;
     private static float s_slowTime = 0.000001f;
@@ -33,8 +33,6 @@ public class Game : MonoBehaviour
 
     private void Start()
     {
-        _scoreText.SetText($"Score: {StepCounter.Score}");
-        
         PrimeTweenConfig.SetTweensCapacity(_tweenCapacity);
     }
 
@@ -44,15 +42,13 @@ public class Game : MonoBehaviour
         
         s_player = _playerPrefab;
         s_player.RequestedRestart += Restart;
-        s_player.Stepped += OnPlayerStepped;
+        
+        _scoreHandler.Init(s_player);
     }
 
     private void OnDisable()
     {
         s_player.RequestedRestart -= Restart;
-        s_player.Stepped -= OnPlayerStepped;
-        
-        StepCounter.Reset();
     }
     
     public static void Pause()
@@ -71,15 +67,6 @@ public class Game : MonoBehaviour
     
     private void Restart()
     {
-        StepCounter.Reset();
-        
-        _sceneHandler.Restart();
-    }
-    
-    private void OnPlayerStepped()
-    {
-        StepCounter.Increment();
-        
-        _scoreText.text = $"Score: {StepCounter.Score}";
+        _scoreHandler.Restore();
     }
 }
