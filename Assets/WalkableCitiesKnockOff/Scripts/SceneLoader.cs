@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Image = UnityEngine.UI.Image;
 
@@ -52,6 +53,7 @@ public class SceneLoader : Singleton<SceneLoader>
     private void OnEnable()
     {
         Game.RequestedRestart += RestartActiveScene;
+        Game.RequestedNextLevel += LoadNextScene;
         _groupHandler.SceneLoaded += OnSceneLoaded;
         _groupHandler.SceneUnloaded += OnSceneUnloaded;
         _groupHandler.Loaded += OnHandlerLoaded;
@@ -60,10 +62,18 @@ public class SceneLoader : Singleton<SceneLoader>
     private void OnDisable()
     {
         Game.RequestedRestart -= RestartActiveScene;
+        Game.RequestedNextLevel -= LoadNextScene;
         _progress.Progressed -= OnLoadingProgressed;
         _groupHandler.SceneLoaded -= OnSceneLoaded;
         _groupHandler.SceneUnloaded -= OnSceneUnloaded;
         _groupHandler.Loaded -= OnHandlerLoaded;
+    }
+
+    private async UniTask LoadNextScene()
+    {
+        _currentSceneIndex++;
+
+        await LoadSceneGroup(_currentSceneIndex);
     }
     
     private async UniTask LoadSceneGroup(int index)

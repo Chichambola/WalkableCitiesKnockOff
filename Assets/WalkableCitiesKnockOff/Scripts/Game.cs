@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using PrimeTween;
 using TMPro;
 using Unity.Mathematics;
@@ -17,6 +18,7 @@ public class Game : Singleton<Game>
     [SerializeField] private AudioHandler _audioHandler;
 
     public static event Action RequestedRestart;
+    public static event Func<UniTask> RequestedNextLevel;
     
     private static float s_normalTime = 1f;
     private static float s_slowTime = 0.000001f;
@@ -58,6 +60,13 @@ public class Game : Singleton<Game>
 
     public static Player GetPlayer() => s_player;
     
+    public static void LoadNextLevel()
+    {
+        Resume();
+        
+        RequestedNextLevel?.Invoke();
+    }
+    
     private void Restart()
     {
         _scoreHandler.Restore();
@@ -67,6 +76,8 @@ public class Game : Singleton<Game>
         Destroy(s_player.gameObject);
         
         RequestedRestart?.Invoke();
+        
+        Resume();
         
         CreatePlayer();
         

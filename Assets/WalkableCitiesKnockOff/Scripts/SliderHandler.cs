@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using PrimeTween;
@@ -13,6 +14,8 @@ public class SliderHandler : MonoBehaviour
     [SerializeField] private Slider _slider;
     [SerializeField] private float _duration = 1f;
     [SerializeField] private float _increaseValue = 0.05f;
+
+    public event Action ReachedMaxValue;
     
     private CancellationTokenSource _cts;
     private TweenSettings<float> _slidersSettings;
@@ -76,6 +79,13 @@ public class SliderHandler : MonoBehaviour
             Tween.UISliderValue(_slider, _slidersSettings);
 
             await UniTask.Delay(TimeSpan.Zero, true, cancellationToken: token);
+
+            if (!Mathf.Approximately(_slider.value, _slider.maxValue))
+                continue;
+            
+            _cts?.Cancel();
+                
+            ReachedMaxValue?.Invoke();
         }
         
         _cts?.Cancel();

@@ -422,6 +422,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24323493e01cd724bbb8bb7cf9f890c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _endOfLevelHandler: {fileID: 1151405917}
   _spawnPoint: {fileID: 531653795}
 --- !u!4 &706001585
 Transform:

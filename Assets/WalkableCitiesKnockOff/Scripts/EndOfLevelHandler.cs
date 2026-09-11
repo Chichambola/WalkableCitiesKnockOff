@@ -14,6 +14,8 @@ public class EndOfLevelHandler : BasicObject
 {
     [SerializeField] private TextMeshProUGUI _text;
     [SerializeField] private SliderHandler _sliderHandler;
+
+    public event Action RequestedEndOfLevel;
     
     private IPlayer _player;
     private CancellationTokenSource _cts;
@@ -23,6 +25,16 @@ public class EndOfLevelHandler : BasicObject
         base.Awake();
 
         _text.text = "";
+    }
+
+    private void OnEnable()
+    {
+        _sliderHandler.ReachedMaxValue += OnReachedMaxValue;
+    }
+
+    private void OnDisable()
+    {
+        _sliderHandler.ReachedMaxValue -= OnReachedMaxValue;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -60,5 +72,12 @@ public class EndOfLevelHandler : BasicObject
         }
         
         _cts?.Cancel();
+    }
+    
+    private void OnReachedMaxValue()
+    {
+        _cts?.Cancel();
+
+        RequestedEndOfLevel?.Invoke();
     }
 }

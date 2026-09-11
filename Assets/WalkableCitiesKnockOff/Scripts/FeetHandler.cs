@@ -48,6 +48,7 @@ public class FeetHandler : MonoBehaviour
 
     public void DestroyActiveFoot()
     {
-        Destroy(_activeFoot.gameObject);
+        if (_activeFoot != null)
+            Destroy(_activeFoot.gameObject);
     }
 }
