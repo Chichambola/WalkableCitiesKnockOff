@@ -20,19 +20,6 @@ public class FeetHandler : MonoBehaviour
             _leftFoot.SetActive(false);
     }
 
-    private void FixedUpdate()
-    {
-        if (_activeFoot == null)
-            return;
-
-        if (_activeFoot.transform.position != _lastPosition)
-        {
-            Debug.Log("Here");
-            
-            _activeFoot.transform.position = _lastPosition;
-        }
-    }
-
     public Vector3 GetPosition()
     {
         if (_leftFoot.IsActive)
@@ -57,5 +44,10 @@ public class FeetHandler : MonoBehaviour
             
             return _leftFoot.transform.position;
         }
+    }
+
+    public void DestroyActiveFoot()
+    {
+        Destroy(_activeFoot.gameObject);
     }
 }

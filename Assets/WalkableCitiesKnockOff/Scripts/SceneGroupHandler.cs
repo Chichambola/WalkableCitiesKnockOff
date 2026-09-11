@@ -16,6 +16,15 @@ public class SceneGroupHandler
     private SceneGroup _activeSceneGroup;
     private string _coreName = "Core";
 
+    public async UniTaskVoid RestartActiveScene()
+    {
+        var name = _activeSceneGroup.FindSceneNameByType(SceneType.ActiveScene);
+        
+        await SceneManager.UnloadSceneAsync(name);
+        
+        await SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+    }
+    
     public async UniTask LoadScenes(SceneGroup group, IProgress<float> progress, bool reloadDupScenes = false)
     {
         _activeSceneGroup = group;
@@ -46,7 +55,7 @@ public class SceneGroupHandler
 
             var operation = SceneManager.LoadSceneAsync(scene.Path, LoadSceneMode.Additive);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(2.5f));
+            await UniTask.Delay(TimeSpan.FromSeconds(.5f));
             
             operationGroup.Add(operation);
             

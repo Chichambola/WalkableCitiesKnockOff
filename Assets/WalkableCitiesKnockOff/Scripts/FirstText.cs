@@ -7,18 +7,28 @@ using UnityEngine;
 
 public class FirstText : MonoBehaviour
 {
+    [SerializeField] private SceneHandler _sceneHandler;
     [SerializeField] private TextMeshProUGUI _text;
-    [SerializeField] private InterfaceReference<IPlayer, MonoBehaviour> _playerPrefab;
 
     private IPlayer _player;
-    
-    private void Awake()
+
+    private void OnEnable()
     {
-        _player = _playerPrefab.Value;
+        _sceneHandler.Loaded += OnSceneHandlerLoaded;
+    }
+
+    private void OnDisable()
+    {
+        _sceneHandler.Loaded -= OnSceneHandlerLoaded;
     }
 
     private void Start()
     {
         _text.text = $"Press {_player.ChangeFootButton.ToUpper()} to start.";
+    }
+    
+    private void OnSceneHandlerLoaded(IPlayer player)
+    {
+        _player = player;
     }
 }

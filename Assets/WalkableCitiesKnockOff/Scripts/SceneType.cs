@@ -5,5 +5,7 @@ using UnityEngine;
 public enum SceneType
 {
     ActiveScene,
-    Tooling
+    Tooling,
+    Gameplay
+    
 }

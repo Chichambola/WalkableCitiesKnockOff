@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Image = UnityEngine.UI.Image;
 
-public class SceneLoader : MonoBehaviour
+public class SceneLoader : Singleton<SceneLoader>
 {
     [SerializeField] private Slider _loadingBar;
     [SerializeField] private float _fillSpeed = 0.5f;
@@ -16,6 +16,7 @@ public class SceneLoader : MonoBehaviour
     [SerializeField] private SceneGroup[] _sceneGroups;
 
     private float _targetProgress;
+    private int _currentSceneIndex;
     private bool _isLoading;
     private LoadingProgress _progress;
     private SceneGroupHandler _groupHandler;
@@ -23,13 +24,6 @@ public class SceneLoader : MonoBehaviour
     private void Awake()
     {
         _groupHandler = new SceneGroupHandler();
-    }
-
-    private void OnEnable()
-    {
-        _groupHandler.SceneLoaded += OnSceneLoaded;
-        _groupHandler.SceneUnloaded += OnSceneUnloaded;
-        _groupHandler.Loaded += OnHandlerLoaded;
     }
 
     private void Update()
@@ -45,21 +39,37 @@ public class SceneLoader : MonoBehaviour
         _loadingBar.value = Mathf.MoveTowards(currentFillAmount, _targetProgress, Time.deltaTime * dynamicFillSpeed);
     }
 
+    public void RestartActiveScene()
+    {
+        _groupHandler.RestartActiveScene().Forget();
+    }
+    
     private async void Start()
     {
         await LoadSceneGroup(0);
     }
 
+    private void OnEnable()
+    {
+        Game.RequestedRestart += RestartActiveScene;
+        _groupHandler.SceneLoaded += OnSceneLoaded;
+        _groupHandler.SceneUnloaded += OnSceneUnloaded;
+        _groupHandler.Loaded += OnHandlerLoaded;
+    }
+    
     private void OnDisable()
     {
+        Game.RequestedRestart -= RestartActiveScene;
         _progress.Progressed -= OnLoadingProgressed;
         _groupHandler.SceneLoaded -= OnSceneLoaded;
         _groupHandler.SceneUnloaded -= OnSceneUnloaded;
         _groupHandler.Loaded -= OnHandlerLoaded;
     }
-
+    
     private async UniTask LoadSceneGroup(int index)
     {
+        _currentSceneIndex = index;
+        
         _loadingBar.value = 0f;
         
         _targetProgress = 1f;

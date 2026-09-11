@@ -16,6 +16,8 @@ public class Game : Singleton<Game>
     [SerializeField] private ScoreHandler _scoreHandler;
     [SerializeField] private AudioHandler _audioHandler;
 
+    public static event Action RequestedRestart;
+    
     private static float s_normalTime = 1f;
     private static float s_slowTime = 0.000001f;
     private static Player s_player;
@@ -30,12 +32,9 @@ public class Game : Singleton<Game>
     {
         Time.timeScale = s_normalTime;
         
-        s_player = Instantiate(_playerPrefab, new Vector3(0,0,0), quaternion.identity);
-        
-        s_player.RequestedRestart += Restart;
-        
-        _scoreHandler.Init(s_player);
-        _audioHandler.Init(s_player);
+        CreatePlayer();
+
+        InitializeServices();
     }
 
     private void OnDisable()
@@ -62,5 +61,30 @@ public class Game : Singleton<Game>
     private void Restart()
     {
         _scoreHandler.Restore();
+        
+        s_player.RequestedRestart -= Restart;
+        
+        Destroy(s_player.gameObject);
+        
+        RequestedRestart?.Invoke();
+        
+        CreatePlayer();
+        
+        InitializeServices();
+    }
+    
+    private void CreatePlayer()
+    {
+        s_player = Instantiate(_playerPrefab, new Vector3(0,0,0), quaternion.identity);
+
+        s_player.transform.parent = transform;
+
+        s_player.RequestedRestart += Restart;
+    }
+    
+    private void InitializeServices()
+    {
+        _scoreHandler.Init(s_player);
+        _audioHandler.Init(s_player);
     }
 }

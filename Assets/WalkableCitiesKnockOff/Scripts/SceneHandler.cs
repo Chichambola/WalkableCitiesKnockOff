@@ -10,11 +10,15 @@ public class SceneHandler : MonoBehaviour
 {
     [SerializeField] private Transform _spawnPoint;
 
+    public event Action<IPlayer> Loaded;
+    
     private IPlayer _player;
     
     private void Start()
     {
         _player = Game.GetPlayer();
+        
+        Loaded?.Invoke(_player);
 
         _player.SetPosition(_spawnPoint.position);
     }

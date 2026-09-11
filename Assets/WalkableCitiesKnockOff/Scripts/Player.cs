@@ -61,6 +61,11 @@ public class Player : MonoBehaviour, IPlayer
         _inputReader.ResetPressed -= OnResetPressed;
     }
 
+    private void OnDestroy()
+    {
+        _feetHandler.DestroyActiveFoot();
+    }
+
     private void UnsubscribeEvents()
     {
         _inputReader.ChangeKeyPressed -= OnChangeKeyPressed;
