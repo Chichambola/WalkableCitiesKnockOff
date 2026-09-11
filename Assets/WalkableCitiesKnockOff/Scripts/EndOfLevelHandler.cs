@@ -12,28 +12,27 @@ using Slider = UnityEngine.UI.Slider;
 
 public class EndOfLevelHandler : BasicObject
 {
-    [SerializeField] private InterfaceReference<IPlayer, MonoBehaviour> _playerPrefab;
     [SerializeField] private TextMeshProUGUI _text;
     [SerializeField] private SliderHandler _sliderHandler;
     
     private IPlayer _player;
     private CancellationTokenSource _cts;
-
+    
     protected override void Awake()
     {
         base.Awake();
 
         _text.text = "";
-        
-        _player = _playerPrefab.Value ?? throw new Exception();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.TryGetComponent(out IPlayer _))
-        {
-            ProcessCollision();
-        }
+        if (!other.TryGetComponent(out IPlayer player))
+            return;
+        
+        _player = player;
+            
+        ProcessCollision();
     }
 
     private void ProcessCollision()

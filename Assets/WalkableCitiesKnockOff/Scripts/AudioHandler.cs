@@ -7,20 +7,16 @@ using AYellowpaper.SerializedCollections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class AudioHandler : MonoBehaviour
+public class AudioHandler : Singleton<AudioHandler>
 {
-    [SerializeField] private InterfaceReference<IPlayer, MonoBehaviour> _playerPrefab;
     [SerializeField] private float _volume;
 
     private IPlayer _player;
     
-    private void Awake()
+    public void Init(IPlayer player)
     {
-        _player = _playerPrefab.Value;
-    }
-
-    private void OnEnable()
-    {
+        _player = player;
+        
         _player.HitSoundOwner += PlaySound;
     }
 

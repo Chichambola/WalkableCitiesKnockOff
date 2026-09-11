@@ -5,7 +5,7 @@ using AYellowpaper;
 using TMPro;
 using UnityEngine;
 
-public class ScoreHandler : MonoBehaviour
+public class ScoreHandler : Singleton<ScoreHandler>
 {
     [SerializeField] private TextMeshProUGUI _text;
     

@@ -3,33 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using PrimeTween;
 using TMPro;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
-public class Game : MonoBehaviour
+public class Game : Singleton<Game>
 {
     [SerializeField] private Player _playerPrefab;
     [SerializeField] private ScoreHandler _scoreHandler;
+    [SerializeField] private AudioHandler _audioHandler;
 
     private static float s_normalTime = 1f;
     private static float s_slowTime = 0.000001f;
     private static Player s_player;
-    private static Game s_Instance;
     private int _tweenCapacity = 3000;
-    
-    private void Awake()
-    {
-        if (s_Instance != null && s_Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        
-        s_Instance = this;
-    }
 
     private void Start()
     {
@@ -40,10 +30,12 @@ public class Game : MonoBehaviour
     {
         Time.timeScale = s_normalTime;
         
-        s_player = _playerPrefab;
+        s_player = Instantiate(_playerPrefab, new Vector3(0,0,0), quaternion.identity);
+        
         s_player.RequestedRestart += Restart;
         
         _scoreHandler.Init(s_player);
+        _audioHandler.Init(s_player);
     }
 
     private void OnDisable()
@@ -64,6 +56,8 @@ public class Game : MonoBehaviour
         
         s_player.UnFreeze();
     }
+
+    public static Player GetPlayer() => s_player;
     
     private void Restart()
     {

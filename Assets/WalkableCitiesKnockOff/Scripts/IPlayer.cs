@@ -13,4 +13,5 @@ public interface IPlayer
     public string AcceptButton { get; }
     public string RestartButton { get; }
     public string ChangeFootButton { get; }
+    void SetPosition(Vector3 spawnPointPosition);
 }

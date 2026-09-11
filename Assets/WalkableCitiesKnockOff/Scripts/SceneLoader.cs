@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 using Image = UnityEngine.UI.Image;
 
 public class SceneLoader : MonoBehaviour
 {
-    [SerializeField] private Image _loadingBar;
+    [SerializeField] private Slider _loadingBar;
     [SerializeField] private float _fillSpeed = 0.5f;
     [SerializeField] private Canvas _loadingCanvas;
     [SerializeField] private Camera _loadingCamera;
@@ -28,7 +29,7 @@ public class SceneLoader : MonoBehaviour
     {
         _groupHandler.SceneLoaded += OnSceneLoaded;
         _groupHandler.SceneUnloaded += OnSceneUnloaded;
-        _groupHandler.Loaded += OnHandlerUnloaded;
+        _groupHandler.Loaded += OnHandlerLoaded;
     }
 
     private void Update()
@@ -36,12 +37,12 @@ public class SceneLoader : MonoBehaviour
         if (!_isLoading)
             return;
 
-        float currentFillAmount = _loadingBar.fillAmount;
+        float currentFillAmount = _loadingBar.value;
         float progressDifference = Mathf.Abs(currentFillAmount - _targetProgress);
 
         float dynamicFillSpeed = progressDifference * _fillSpeed;
-
-        _loadingBar.fillAmount = Mathf.Lerp(currentFillAmount, _targetProgress, Time.deltaTime * dynamicFillSpeed);
+        
+        _loadingBar.value = Mathf.MoveTowards(currentFillAmount, _targetProgress, Time.deltaTime * dynamicFillSpeed);
     }
 
     private async void Start()
@@ -54,12 +55,13 @@ public class SceneLoader : MonoBehaviour
         _progress.Progressed -= OnLoadingProgressed;
         _groupHandler.SceneLoaded -= OnSceneLoaded;
         _groupHandler.SceneUnloaded -= OnSceneUnloaded;
-        _groupHandler.Loaded -= OnHandlerUnloaded;
+        _groupHandler.Loaded -= OnHandlerLoaded;
     }
 
     private async UniTask LoadSceneGroup(int index)
     {
-        _loadingBar.fillAmount = 0f;
+        _loadingBar.value = 0f;
+        
         _targetProgress = 1f;
 
         if (index < 0 || index >= _sceneGroups.Length)
@@ -92,7 +94,7 @@ public class SceneLoader : MonoBehaviour
         _loadingCamera.gameObject.SetActive(enable);
     }
     
-    private void OnHandlerUnloaded()
+    private void OnHandlerLoaded()
     {
         Debug.Log("Scene group loaded");
     }
@@ -105,5 +107,7 @@ public class SceneLoader : MonoBehaviour
     private void OnSceneLoaded(string obj)
     {
         Debug.Log($"Loaded: {obj}");
+        
+        
     }
 }

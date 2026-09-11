@@ -45,6 +45,8 @@ public class SceneGroupHandler
                 continue;
 
             var operation = SceneManager.LoadSceneAsync(scene.Path, LoadSceneMode.Additive);
+
+            await UniTask.Delay(TimeSpan.FromSeconds(2.5f));
             
             operationGroup.Add(operation);
             
@@ -55,7 +57,7 @@ public class SceneGroupHandler
         {
             progress?.Report(operationGroup.Progress);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(1));
+            await UniTask.Delay(TimeSpan.FromSeconds(0.01f));
         }
 
         Scene activeScene = SceneManager.GetSceneByName(_activeSceneGroup.FindSceneNameByType(SceneType.ActiveScene));

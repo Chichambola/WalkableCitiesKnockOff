@@ -488,7 +488,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "1653bcfe904747b3a9c0b44f62566177",
     "m_Id": 0,
-    "m_DisplayName": "DistortionScaleX",
+    "m_DisplayName": "DistortionScrollX",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",

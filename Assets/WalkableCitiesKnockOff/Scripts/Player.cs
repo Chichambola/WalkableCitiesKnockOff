@@ -79,6 +79,11 @@ public class Player : MonoBehaviour, IPlayer
         _collisionHandler.HitSoundOwner += OnHitSoundOwner;
     }
 
+    public void SetPosition(Vector3 spawnPointPosition)
+    {
+        transform.position = spawnPointPosition;
+    }
+
     public void Freeze()
     {
         _isFrozen = true;

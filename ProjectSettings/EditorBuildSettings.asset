@@ -6,14 +6,17 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/WalkableCitiesKnockOff/Scenes/Core.unity
+    guid: 1b7edcb4deb3f194083b8e5ec7fb2b58
+  - enabled: 1
+    path: Assets/WalkableCitiesKnockOff/Scenes/Gameplay.unity
+    guid: c9c69c1859e1b2849a3dcf564ade5dba
+  - enabled: 1
     path: Assets/WalkableCitiesKnockOff/Scenes/FirstLevel.unity
     guid: d870fcb3b83119b43a0c8acc6f44f84c
   - enabled: 1
     path: Assets/WalkableCitiesKnockOff/Scenes/SecondLevel.unity
     guid: b4d349319e8357f42a4e43093dcc7ab2
-  - enabled: 1
-    path: Assets/WalkableCitiesKnockOff/Scenes/Core.unity
-    guid: 1b7edcb4deb3f194083b8e5ec7fb2b58
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 7736a41b23a92bdd9a2340d96d65da30, type: 2}
   m_UseUCBPForAssetBundles: 0
