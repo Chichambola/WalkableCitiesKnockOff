@@ -6,6 +6,6 @@ public enum SceneType
 {
     ActiveScene,
     Tooling,
-    Gameplay
-    
+    Gameplay,
+    UI
 }

@@ -18,8 +18,8 @@ public class SceneHandler : MonoBehaviour
     private void Start()
     {
         InitializePlayer();
-
-        EndOfLevelHandler.Init(_endOfLevel);
+        
+        EndOfLevelHandler.Init(_endOfLevel, EndOfLevelHandler.Instance as EndOfLevelHandler);
     }
 
     private void InitializePlayer()

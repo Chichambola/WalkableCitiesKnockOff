@@ -1,14 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
-using AYellowpaper;
 using Cysharp.Threading.Tasks;
-using PrimeTween;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Slider = UnityEngine.UI.Slider;
 
 public class EndOfLevelHandler : Singleton<EndOfLevelHandler>
 {
@@ -21,25 +16,52 @@ public class EndOfLevelHandler : Singleton<EndOfLevelHandler>
     
     private IPlayer _player;
     private CancellationTokenSource _cts;
+    private Vector3 _initialPosition;
+    private Vector2 _outOfCameraPosition = new Vector2(99999, 99999);
     private static EndOfLevel s_endOfLevel;
     
-    public static void Init(EndOfLevel endOfLevel) => s_endOfLevel = endOfLevel;
-    
-    protected void Awake()
+    public static void Init(EndOfLevel endOfLevel, EndOfLevelHandler instance)
     {
+        if (s_endOfLevel != null)
+        {
+            s_endOfLevel.PlayerDetected -= instance.Process;
+            s_endOfLevel = null;
+        }
+
+        s_endOfLevel = endOfLevel;
+        s_endOfLevel.PlayerDetected += instance.Process;
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        
         _text.text = "";
+
+        _initialPosition = transform.position;
     }
 
     private void OnEnable()
     {
         _sliderHandler.ReachedMaxValue += OnReachedMaxValue;
+        Game.RequestedRestart += OnRequestedRestart;
+        
+        SetActive(false);
     }
 
     private void OnDisable()
     {
         _sliderHandler.ReachedMaxValue -= OnReachedMaxValue;
+        Game.RequestedRestart -= OnRequestedRestart;
+        
+        if (s_endOfLevel != null)
+        {
+            var instance = Instance as EndOfLevelHandler;
+
+            s_endOfLevel.PlayerDetected -= instance.Process;
+        }
     }
-    
+
     private void Process(IPlayer player)
     {
         _player = player;
@@ -50,6 +72,8 @@ public class EndOfLevelHandler : Singleton<EndOfLevelHandler>
 
             _text.text = $"Hold {_player.AcceptButton.ToUpper()} to proceed to the next level\n" +
                          $"Press {_player.RestartButton.ToUpper()} to restart level";
+            
+            SetActive(true);
             
             _cts = new CancellationTokenSource();
             _cts.RegisterRaiseCancelOnDestroy(this);
@@ -82,4 +106,28 @@ public class EndOfLevelHandler : Singleton<EndOfLevelHandler>
 
         RequestedEndOfLevel?.Invoke();
     }
+    
+    private void OnRequestedRestart()
+    {
+        SetActive(false);
+    }
+
+    private void SetActive(bool value)
+    {
+        if (!value)
+        {
+            _cts?.Cancel();
+            
+            _sliderHandler.StopMoving();
+
+            transform.position = _outOfCameraPosition;
+        }
+        else
+        {
+            transform.position = _initialPosition;
+        }
+    }
 }
+
+
+

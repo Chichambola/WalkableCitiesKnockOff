@@ -20,6 +20,7 @@ public class SliderHandler : MonoBehaviour
     private CancellationTokenSource _cts;
     private TweenSettings<float> _slidersSettings;
     private bool _isGaining;
+    private Tween _tween;
 
     private void Awake()
     {
@@ -29,17 +30,21 @@ public class SliderHandler : MonoBehaviour
         _slidersSettings.settings.useUnscaledTime = true;
     }
 
-    private void OnEnable()
+    private void OnDisable()
     {
-        _slider.gameObject.SetActive(false);
+        _cts?.Cancel();
     }
 
     private void OnDestroy()
     {
-        _cts?.Cancel();
         _cts?.Dispose();
     }
-    
+
+    private void Update()
+    {
+        Debug.Log(_slider.value);
+    }
+
     public void StartMoving()
     {
         _cts = new CancellationTokenSource();
@@ -51,6 +56,11 @@ public class SliderHandler : MonoBehaviour
     public void StopMoving()
     {
         _cts?.Cancel();
+        
+        _slidersSettings.startValue = _slider.value;
+        _slidersSettings.endValue = 0f;
+        
+        Tween.UISliderValue(_slider, _slidersSettings);
     }
     
     public void SetGainingStatus(bool value)
@@ -58,7 +68,7 @@ public class SliderHandler : MonoBehaviour
         _isGaining = value;
     }
 
-    private async UniTaskVoid MoveSliderTask(CancellationToken token)
+    private async UniTask MoveSliderTask(CancellationToken token)
     {
         float value = 0f;
         _slider.gameObject.SetActive(true);
@@ -81,14 +91,13 @@ public class SliderHandler : MonoBehaviour
             
             _slidersSettings.startValue = _slider.value;
             _slidersSettings.endValue = value;
-            Tween.UISliderValue(_slider, _slidersSettings);
 
+            Tween.UISliderValue(_slider, _slidersSettings);
+            
             await UniTask.Delay(TimeSpan.Zero, true, cancellationToken: token);
 
             if (!Mathf.Approximately(_slider.value, _slider.maxValue))
                 continue;
-            
-            _cts?.Cancel();
                 
             ReachedMaxValue?.Invoke();
         }

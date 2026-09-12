@@ -4,16 +4,24 @@ using UnityEngine;
 
 public class Singleton<T> : MonoBehaviour where T : class
 {
-    private static Singleton<T> s_Instance;
+    private static Singleton<T> s_instance;
+
+    public static Singleton<T> Instance => s_instance;
     
-    private void Awake()
+    protected virtual void Awake()
     {
-        if (s_Instance != null && s_Instance != this)
+        if (s_instance != null && s_instance != this)
         {
             Destroy(gameObject);
             return;
         }
         
-        s_Instance = this;
+        s_instance = this;
+    }
+    
+    private void OnDestroy()
+    {
+        if (s_instance == this) 
+            s_instance = null;
     }
 }
