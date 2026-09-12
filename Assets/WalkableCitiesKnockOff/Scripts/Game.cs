@@ -24,6 +24,7 @@ public class Game : Singleton<Game>
     private static float s_slowTime = 0.000001f;
     private static Player s_player;
     private int _tweenCapacity = 3000;
+    private Vector3 _startPosition = new Vector3(999, 999, 999);
 
     private void Start()
     {
@@ -86,7 +87,7 @@ public class Game : Singleton<Game>
     
     private void CreatePlayer()
     {
-        s_player = Instantiate(_playerPrefab, new Vector3(0,0,0), quaternion.identity);
+        s_player = Instantiate(_playerPrefab, _startPosition, quaternion.identity);
 
         s_player.transform.parent = transform;
 

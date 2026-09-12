@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class BasicObject : MonoBehaviour
 {
     [SerializeField] private RigidbodyType2D _type;
+    [SerializeField] private bool _isTrigger = false;
     
     protected Rigidbody2D Rigidbody;
     private Collider _collider;
@@ -20,5 +21,6 @@ public abstract class BasicObject : MonoBehaviour
     {
         GetComponent<Rigidbody2D>().gravityScale = 0;
         GetComponent<Rigidbody2D>().bodyType = _type;
+        GetComponent<Collider2D>().isTrigger = _isTrigger;
     }
 }

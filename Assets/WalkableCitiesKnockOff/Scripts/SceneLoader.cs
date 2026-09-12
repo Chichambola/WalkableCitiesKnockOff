@@ -39,11 +39,6 @@ public class SceneLoader : Singleton<SceneLoader>
         
         _loadingBar.value = Mathf.MoveTowards(currentFillAmount, _targetProgress, Time.deltaTime * dynamicFillSpeed);
     }
-
-    public void RestartActiveScene()
-    {
-        _groupHandler.RestartActiveScene().Forget();
-    }
     
     private async void Start()
     {
@@ -71,6 +66,8 @@ public class SceneLoader : Singleton<SceneLoader>
 
     private async UniTask LoadNextScene()
     {
+        await SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().name);
+        
         _currentSceneIndex++;
 
         await LoadSceneGroup(_currentSceneIndex);
@@ -127,7 +124,10 @@ public class SceneLoader : Singleton<SceneLoader>
     private void OnSceneLoaded(string obj)
     {
         Debug.Log($"Loaded: {obj}");
-        
-        
+    }
+    
+    private void RestartActiveScene()
+    {
+        _groupHandler.RestartActiveScene().Forget();
     }
 }

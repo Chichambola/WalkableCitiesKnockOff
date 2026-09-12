@@ -48,7 +48,12 @@ public class SliderHandler : MonoBehaviour
         MoveSliderTask(_cts.Token).Forget();
     }
 
-    public void SetActive(bool value)
+    public void StopMoving()
+    {
+        _cts?.Cancel();
+    }
+    
+    public void SetGainingStatus(bool value)
     {
         _isGaining = value;
     }

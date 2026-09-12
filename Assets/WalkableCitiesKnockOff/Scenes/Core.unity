@@ -232,12 +232,12 @@ MonoBehaviour:
   _loadingCanvas: {fileID: 678690707}
   _loadingCamera: {fileID: 325790174}
   _sceneGroups:
-  - _groupName: FirstLeve
+  - _groupName: FirstLevel
     _scenes:
     - _reference:
         asset: {fileID: 102900000, guid: c9c69c1859e1b2849a3dcf564ade5dba, type: 3}
         guid: c9c69c1859e1b2849a3dcf564ade5dba
-      _sceneType: 0
+      _sceneType: 2
     - _reference:
         asset: {fileID: 102900000, guid: d870fcb3b83119b43a0c8acc6f44f84c, type: 3}
         guid: d870fcb3b83119b43a0c8acc6f44f84c
@@ -247,7 +247,7 @@ MonoBehaviour:
     - _reference:
         asset: {fileID: 102900000, guid: c9c69c1859e1b2849a3dcf564ade5dba, type: 3}
         guid: c9c69c1859e1b2849a3dcf564ade5dba
-      _sceneType: 1
+      _sceneType: 2
     - _reference:
         asset: {fileID: 102900000, guid: b4d349319e8357f42a4e43093dcc7ab2, type: 3}
         guid: b4d349319e8357f42a4e43093dcc7ab2

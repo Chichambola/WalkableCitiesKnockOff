@@ -10,20 +10,23 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Slider = UnityEngine.UI.Slider;
 
-public class EndOfLevelHandler : BasicObject
+public class EndOfLevelHandler : Singleton<EndOfLevelHandler>
 {
+    [SerializeField] private Canvas _canvas;
     [SerializeField] private TextMeshProUGUI _text;
     [SerializeField] private SliderHandler _sliderHandler;
+    [SerializeField] private bool _isImmediateLevelChanging = false;
 
-    public event Action RequestedEndOfLevel;
+    public static event Action RequestedEndOfLevel;
     
     private IPlayer _player;
     private CancellationTokenSource _cts;
+    private static EndOfLevel s_endOfLevel;
     
-    protected override void Awake()
+    public static void Init(EndOfLevel endOfLevel) => s_endOfLevel = endOfLevel;
+    
+    protected void Awake()
     {
-        base.Awake();
-
         _text.text = "";
     }
 
@@ -36,37 +39,36 @@ public class EndOfLevelHandler : BasicObject
     {
         _sliderHandler.ReachedMaxValue -= OnReachedMaxValue;
     }
-
-    private void OnTriggerEnter2D(Collider2D other)
+    
+    private void Process(IPlayer player)
     {
-        if (!other.TryGetComponent(out IPlayer player))
-            return;
-        
         _player = player;
+        
+        if (!_isImmediateLevelChanging)
+        {
+            Game.Pause();
+
+            _text.text = $"Hold {_player.AcceptButton.ToUpper()} to proceed to the next level\n" +
+                         $"Press {_player.RestartButton.ToUpper()} to restart level";
             
-        ProcessCollision();
-    }
+            _cts = new CancellationTokenSource();
+            _cts.RegisterRaiseCancelOnDestroy(this);
 
-    private void ProcessCollision()
-    {
-        Game.Pause();
+            IsPlayerHoldingButton(_cts.Token).Forget();
 
-        _text.text = $"Hold {_player.AcceptButton.ToUpper()} to proceed to the next level\n" +
-                     $"Press {_player.RestartButton.ToUpper()} to restart level";
-
-        _cts = new CancellationTokenSource();
-        _cts.RegisterRaiseCancelOnDestroy(this);
-        
-        IsPlayerHoldingButton(_cts.Token).Forget();
-        
-        _sliderHandler.StartMoving();
+            _sliderHandler.StartMoving();
+        }
+        else
+        {
+            RequestedEndOfLevel?.Invoke();
+        }
     }
 
     private async UniTaskVoid IsPlayerHoldingButton(CancellationToken token)
     {
         while (!_cts.IsCancellationRequested)
         {
-            _sliderHandler.SetActive(_player.IsAccepting);
+            _sliderHandler.SetGainingStatus(_player.IsAccepting);
 
             await UniTask.Delay(TimeSpan.Zero, ignoreTimeScale: true, cancellationToken: token);
         }

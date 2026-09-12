@@ -8,32 +8,29 @@ using UnityEngine.SceneManagement;
 
 public class SceneHandler : MonoBehaviour
 {
-    [SerializeField] private EndOfLevelHandler _endOfLevelHandler;
     [SerializeField] private Transform _spawnPoint;
+    [SerializeField] private EndOfLevel _endOfLevel;
 
     public event Action<IPlayer> Loaded;
     
     private IPlayer _player;
 
-    private void OnEnable()
+    private void Start()
     {
-        _endOfLevelHandler.RequestedEndOfLevel += OnRequestedEndOfLevel;
-    }
-    
-    private void OnDisable()
-    {
-        _endOfLevelHandler.RequestedEndOfLevel -= OnRequestedEndOfLevel;
+        InitializePlayer();
+
+        EndOfLevelHandler.Init(_endOfLevel);
     }
 
-    private void Start()
+    private void InitializePlayer()
     {
         _player = Game.GetPlayer();
         
         Loaded?.Invoke(_player);
-
+        
         _player.SetPosition(_spawnPoint.position);
     }
-    
+
     private void OnRequestedEndOfLevel()
     {
         Game.LoadNextLevel();
