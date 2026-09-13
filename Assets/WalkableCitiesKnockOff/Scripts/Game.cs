@@ -14,7 +14,6 @@ using UnityEngine.Serialization;
 public class Game : Singleton<Game>
 {
     [SerializeField] private Player _playerPrefab;
-    [SerializeField] private ScoreHandler _scoreHandler;
     [SerializeField] private AudioHandler _audioHandler;
 
     public static event Action RequestedRestart;
@@ -37,12 +36,15 @@ public class Game : Singleton<Game>
         
         CreatePlayer();
 
+        EndOfLevelHandler.RequestedEndOfLevel += LoadNextLevel;
+
         InitializeServices();
     }
 
     private void OnDisable()
     {
         s_player.RequestedRestart -= Restart;
+        EndOfLevelHandler.RequestedEndOfLevel -= LoadNextLevel;
     }
     
     public static void Pause()
@@ -70,19 +72,17 @@ public class Game : Singleton<Game>
     
     private void Restart()
     {
-        _scoreHandler.Restore();
-        
         s_player.RequestedRestart -= Restart;
         
         Destroy(s_player.gameObject);
-        
-        RequestedRestart?.Invoke();
         
         Resume();
         
         CreatePlayer();
         
         InitializeServices();
+        
+        RequestedRestart?.Invoke();
     }
     
     private void CreatePlayer()
@@ -96,7 +96,6 @@ public class Game : Singleton<Game>
     
     private void InitializeServices()
     {
-        _scoreHandler.Init(s_player);
         _audioHandler.Init(s_player);
     }
 }

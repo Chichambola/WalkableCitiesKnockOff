@@ -11,6 +11,10 @@ public class EndOfLevel : BasicObject
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.TryGetComponent(out IPlayer player))
+        {
+            Debug.Log("Player detected");
+            
             PlayerDetected?.Invoke(player);
+        }
     }
 }

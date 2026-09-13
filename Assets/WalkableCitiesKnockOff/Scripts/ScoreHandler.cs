@@ -14,27 +14,31 @@ public class ScoreHandler : Singleton<ScoreHandler>
     private int _currentStepCount;
     private int _wholeAmount;
     
-    public void Init(IPlayer player)
-    {
-        _player = player;
-
-        _player.Stepped += OnStep;
-    }
-
     private void OnEnable()
     {
+        _player = Game.GetPlayer();
+        _player.Stepped += OnStep;
+        Game.RequestedRestart += Restore;
+        
         UpdateText();
     }
 
     private void OnDisable()
     {
         _player.Stepped -= OnStep;
+        Game.RequestedRestart -= Restore;
         
         Restore();
     }
 
     public void Restore()
     {
+        _player.Stepped -= OnStep;
+
+        _player = Game.GetPlayer();
+        
+        _player.Stepped += OnStep;
+        
         _currentStepCount = 0;
         
         UpdateText();

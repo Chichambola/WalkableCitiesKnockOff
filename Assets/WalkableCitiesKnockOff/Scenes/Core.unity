@@ -246,6 +246,24 @@ MonoBehaviour:
         asset: {fileID: 102900000, guid: d870fcb3b83119b43a0c8acc6f44f84c, type: 3}
         guid: d870fcb3b83119b43a0c8acc6f44f84c
       _sceneType: 0
+  - _groupName: SecondLevel
+    _scenes:
+    - _reference:
+        asset: {fileID: 102900000, guid: 1b7edcb4deb3f194083b8e5ec7fb2b58, type: 3}
+        guid: 1b7edcb4deb3f194083b8e5ec7fb2b58
+      _sceneType: 1
+    - _reference:
+        asset: {fileID: 102900000, guid: c9c69c1859e1b2849a3dcf564ade5dba, type: 3}
+        guid: c9c69c1859e1b2849a3dcf564ade5dba
+      _sceneType: 2
+    - _reference:
+        asset: {fileID: 102900000, guid: 2aeccd9037f81b64894bfd5ad3f8fece, type: 3}
+        guid: 2aeccd9037f81b64894bfd5ad3f8fece
+      _sceneType: 3
+    - _reference:
+        asset: {fileID: 102900000, guid: b4d349319e8357f42a4e43093dcc7ab2, type: 3}
+        guid: b4d349319e8357f42a4e43093dcc7ab2
+      _sceneType: 0
 --- !u!4 &275729471
 Transform:
   m_ObjectHideFlags: 0

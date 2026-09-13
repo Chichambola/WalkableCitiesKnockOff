@@ -965,7 +965,7 @@ MonoBehaviour:
   _canvas: {fileID: 2038907725}
   _text: {fileID: 772977312}
   _sliderHandler: {fileID: 1151405920}
-  _isImmediateLevelChanging: 0
+  _isImmediateLevelChanging: 1
 --- !u!114 &1151405920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1072,7 +1072,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!20 &1700781855
 Camera:
   m_ObjectHideFlags: 0

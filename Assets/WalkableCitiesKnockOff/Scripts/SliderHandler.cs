@@ -40,11 +40,6 @@ public class SliderHandler : MonoBehaviour
         _cts?.Dispose();
     }
 
-    private void Update()
-    {
-        Debug.Log(_slider.value);
-    }
-
     public void StartMoving()
     {
         _cts = new CancellationTokenSource();
