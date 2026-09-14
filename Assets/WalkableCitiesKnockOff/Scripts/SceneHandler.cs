@@ -26,8 +26,8 @@ public class SceneHandler : MonoBehaviour
     {
         _player = Game.GetPlayer();
         
-        Loaded?.Invoke(_player);
-        
         _player.SetPosition(_spawnPoint.position);
+        
+        Loaded?.Invoke(_player);
     }
 }

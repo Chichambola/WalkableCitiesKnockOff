@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using AYellowpaper;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ public class ScoreHandler : Singleton<ScoreHandler>
         _player = Game.GetPlayer();
         _player.Stepped += OnStep;
         Game.RequestedRestart += Restore;
+        Game.RequestedNextLevel += OnRequestedNextLevel;
         
         UpdateText();
     }
@@ -27,12 +29,20 @@ public class ScoreHandler : Singleton<ScoreHandler>
     {
         _player.Stepped -= OnStep;
         Game.RequestedRestart -= Restore;
+        Game.RequestedNextLevel -= OnRequestedNextLevel;
 
         s_currentStepCount = 0;
         s_wholeAmount = 0;
     }
 
-    public void Restore()
+    private async UniTask OnRequestedNextLevel()
+    {
+        Restore();
+
+        await UniTask.Yield();
+    }
+
+    private void Restore()
     {
         _player.Stepped -= OnStep;
 

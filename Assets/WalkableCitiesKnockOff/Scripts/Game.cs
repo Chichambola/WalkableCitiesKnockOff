@@ -6,6 +6,7 @@ using PrimeTween;
 using TMPro;
 using Unity.Mathematics;
 using Unity.VisualScripting;
+using UnityEditor.Profiling;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
@@ -35,16 +36,18 @@ public class Game : Singleton<Game>
         Time.timeScale = s_normalTime;
         
         CreatePlayer();
-
-        EndOfLevelHandler.RequestedEndOfLevel += LoadNextLevel;
-
+        
         InitializeServices();
+        
+        EndOfLevelHandler.RequestedEndOfLevel += LoadNextLevel;
+        SceneLoader.Loaded += OnAllScenesLoaded;
     }
 
     private void OnDisable()
     {
         s_player.RequestedRestart -= Restart;
         EndOfLevelHandler.RequestedEndOfLevel -= LoadNextLevel;
+        SceneLoader.Loaded -= OnAllScenesLoaded;
     }
     
     public static void Pause()
@@ -63,31 +66,36 @@ public class Game : Singleton<Game>
 
     public static Player GetPlayer() => s_player;
     
-    public static void LoadNextLevel()
+    private void LoadNextLevel()
     {
-        Resume();
+        PerformLevelStart();
         
+        s_player.Freeze();
+
         RequestedNextLevel?.Invoke();
     }
-    
+
     private void Restart()
     {
-        s_player.RequestedRestart -= Restart;
-        
-        Destroy(s_player.gameObject);
-        
-        Resume();
-        
-        CreatePlayer();
-        
-        InitializeServices();
+        PerformLevelStart();
         
         RequestedRestart?.Invoke();
+        
+        s_player.UnFreeze();
     }
     
     private void CreatePlayer()
     {
+        if (s_player != null)
+        {
+            s_player.RequestedRestart -= Restart;
+        
+            Destroy(s_player.gameObject);
+        }
+        
         s_player = Instantiate(_playerPrefab, _startPosition, quaternion.identity);
+        
+        s_player.Freeze();
 
         s_player.transform.parent = transform;
 
@@ -97,5 +105,19 @@ public class Game : Singleton<Game>
     private void InitializeServices()
     {
         _audioHandler.Init(s_player);
+    }
+    
+    private void PerformLevelStart()
+    {
+        Resume();
+        
+        CreatePlayer();
+        
+        InitializeServices();
+    }
+    
+    private void OnAllScenesLoaded()
+    {
+        s_player.UnFreeze();
     }
 }

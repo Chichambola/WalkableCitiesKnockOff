@@ -16,14 +16,18 @@ public class SceneLoader : Singleton<SceneLoader>
     [SerializeField] private Camera _loadingCamera;
     [SerializeField] private SceneGroup[] _sceneGroups;
 
+    public static event Action Loaded;
+    
     private float _targetProgress;
     private int _currentSceneIndex;
     private bool _isLoading;
     private LoadingProgress _progress;
     private SceneGroupHandler _groupHandler;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        
         _groupHandler = new SceneGroupHandler();
     }
 
@@ -94,7 +98,9 @@ public class SceneLoader : Singleton<SceneLoader>
         
         EnableLoadingCanvas();
 
-        await _groupHandler.LoadScenes(_sceneGroups[index], _progress);
+        _groupHandler.SetGroup(_sceneGroups[index]);
+        
+        await _groupHandler.LoadScenes(_progress);
         
         EnableLoadingCanvas(false);
     }
@@ -114,6 +120,8 @@ public class SceneLoader : Singleton<SceneLoader>
     private void OnHandlerLoaded()
     {
         Debug.Log("Scene group loaded");
+
+        Loaded?.Invoke();
     }
 
     private void OnSceneUnloaded(string obj)

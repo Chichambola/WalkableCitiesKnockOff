@@ -12,13 +12,12 @@ public class SceneGroupHandler
     public event Action Loaded;
 
     private SceneGroup _activeSceneGroup;
+    private List<string> _scenesToKeep;
     private string _coreName = "Core";
 
-    public string GetActiveSceneName()
+    public SceneGroupHandler()
     {
-        string name = _activeSceneGroup.FindSceneNameByType(SceneType.ActiveScene);
-
-        return name;
+        _scenesToKeep = new List<string>();
     }
     
     public async UniTask RestartActiveScene()
@@ -28,12 +27,12 @@ public class SceneGroupHandler
         await SceneManager.UnloadSceneAsync(name);
         
         await SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(name));
     }
     
-    public async UniTask LoadScenes(SceneGroup group, IProgress<float> progress, bool reloadDupScenes = false)
+    public async UniTask LoadScenes(IProgress<float> progress, bool reloadDupScenes = false)
     {
-        _activeSceneGroup = group;
-
         var loadedScenes = new List<string>();
 
         int sceneCount = SceneManager.sceneCount;
@@ -47,7 +46,7 @@ public class SceneGroupHandler
 
         var operationGroup = new AsyncOperationGroup(totalScenesToLoad);
 
-        var sceneData = group.GetScenes();
+        var sceneData = _activeSceneGroup.GetScenes();
         
         for (int i = 0; i < totalScenesToLoad; i++)
         {
@@ -85,26 +84,36 @@ public class SceneGroupHandler
     public async UniTask UnloadScenes()
     {
         var scenes = new List<string>();
-        var activeScene = SceneManager.GetActiveScene().name;
         
         int sceneCount = SceneManager.sceneCount;
 
         var activeGroupScenes = _activeSceneGroup.GetScenes();
 
-        List<string> scenesToKeep = (from scene in activeGroupScenes where scene.HasSceneType(SceneType.DontDestroy) select scene.Name).ToList();
-
+        foreach (var scene in activeGroupScenes.Where(scene => scene.HasSceneType(SceneType.DontDestroy) && !_scenesToKeep.Contains(scene.Name)))
+        {
+            _scenesToKeep.Add(scene.Name);
+        }
+        
         for (int i = 0; i < sceneCount; i++)
         {
-            bool isSameName = false;
+            bool isFound = false;
             
             var sceneAt = SceneManager.GetSceneAt(i);
-
+            
             if (!sceneAt.isLoaded)
                 continue;
 
             var sceneName = sceneAt.name;
+
+            foreach (var name in _scenesToKeep)
+            {
+                if (string.Equals(sceneName, name, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    isFound = true;
+                }
+            }
             
-            if (sceneName.Equals(activeScene) || string.Equals(sceneName, _coreName, StringComparison.CurrentCultureIgnoreCase) || scenesToKeep.Contains(sceneName))
+            if (string.Equals(sceneName, _coreName, StringComparison.CurrentCultureIgnoreCase) || isFound)
                 continue;
             
             scenes.Add(sceneName);
@@ -128,5 +137,10 @@ public class SceneGroupHandler
         {
             await UniTask.Delay(TimeSpan.FromSeconds(1));
         }
+    }
+
+    public void SetGroup(SceneGroup sceneGroup)
+    {
+        _activeSceneGroup = sceneGroup;
     }
 }

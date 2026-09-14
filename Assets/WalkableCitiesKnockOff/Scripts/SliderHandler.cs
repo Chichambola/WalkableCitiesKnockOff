@@ -95,6 +95,8 @@ public class SliderHandler : MonoBehaviour
                 continue;
                 
             ReachedMaxValue?.Invoke();
+            
+            _cts?.Cancel();
         }
         
         _cts?.Cancel();

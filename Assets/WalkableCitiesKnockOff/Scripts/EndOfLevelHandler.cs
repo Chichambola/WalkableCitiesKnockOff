@@ -17,7 +17,7 @@ public class EndOfLevelHandler : Singleton<EndOfLevelHandler>
     private IPlayer _player;
     private CancellationTokenSource _cts;
     private Vector3 _initialPosition;
-    private Vector2 _outOfCameraPosition = new Vector2(99999, 99999);
+    private Vector3 _outOfCameraPosition = new (99999, 99999);
     private static EndOfLevel s_endOfLevel;
     
     public static void Init(EndOfLevel endOfLevel, EndOfLevelHandler instance)
@@ -104,6 +104,8 @@ public class EndOfLevelHandler : Singleton<EndOfLevelHandler>
     {
         _cts?.Cancel();
 
+        SetActive(false);
+        
         RequestedEndOfLevel?.Invoke();
     }
     
