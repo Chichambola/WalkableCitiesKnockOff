@@ -30,9 +30,4 @@ public class SceneHandler : MonoBehaviour
         
         _player.SetPosition(_spawnPoint.position);
     }
-
-    private void OnRequestedEndOfLevel()
-    {
-        Game.LoadNextLevel();
-    }
 }

@@ -16,7 +16,14 @@ public class SceneGroupHandler
     private SceneGroup _activeSceneGroup;
     private string _coreName = "Core";
 
-    public async UniTaskVoid RestartActiveScene()
+    public string GetActiveSceneName()
+    {
+        string name = _activeSceneGroup.FindSceneNameByType(SceneType.ActiveScene);
+
+        return name;
+    }
+    
+    public async UniTask RestartActiveScene()
     {
         var name = _activeSceneGroup.FindSceneNameByType(SceneType.ActiveScene);
         
