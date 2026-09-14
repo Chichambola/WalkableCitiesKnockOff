@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using System.Linq;
 using Cysharp.Threading.Tasks;
-using NUnit.Framework;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -37,11 +35,9 @@ public class SceneGroupHandler
         _activeSceneGroup = group;
 
         var loadedScenes = new List<string>();
-        
-        await UnloadScenes();
 
         int sceneCount = SceneManager.sceneCount;
-
+        
         for (int i = 0; i < sceneCount; i++)
         {
             loadedScenes.Add(SceneManager.GetSceneAt(i).name);
@@ -56,7 +52,7 @@ public class SceneGroupHandler
         for (int i = 0; i < totalScenesToLoad; i++)
         {
             var scene = sceneData[i];
-
+            
             if (reloadDupScenes == false && loadedScenes.Contains(scene.Name))
                 continue;
 
@@ -77,7 +73,7 @@ public class SceneGroupHandler
         }
 
         Scene activeScene = SceneManager.GetSceneByName(_activeSceneGroup.FindSceneNameByType(SceneType.ActiveScene));
-
+        
         if (activeScene.IsValid())
         {
             SceneManager.SetActiveScene(activeScene);
@@ -90,11 +86,17 @@ public class SceneGroupHandler
     {
         var scenes = new List<string>();
         var activeScene = SceneManager.GetActiveScene().name;
-
+        
         int sceneCount = SceneManager.sceneCount;
+
+        var activeGroupScenes = _activeSceneGroup.GetScenes();
+
+        List<string> scenesToKeep = (from scene in activeGroupScenes where scene.HasSceneType(SceneType.DontDestroy) select scene.Name).ToList();
 
         for (int i = 0; i < sceneCount; i++)
         {
+            bool isSameName = false;
+            
             var sceneAt = SceneManager.GetSceneAt(i);
 
             if (!sceneAt.isLoaded)
@@ -102,7 +104,7 @@ public class SceneGroupHandler
 
             var sceneName = sceneAt.name;
             
-            if (sceneName.Equals(activeScene) || string.Equals(sceneName, _coreName, StringComparison.CurrentCultureIgnoreCase))
+            if (sceneName.Equals(activeScene) || string.Equals(sceneName, _coreName, StringComparison.CurrentCultureIgnoreCase) || scenesToKeep.Contains(sceneName))
                 continue;
             
             scenes.Add(sceneName);

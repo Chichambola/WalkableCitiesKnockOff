@@ -7,5 +7,6 @@ public enum SceneType
     ActiveScene,
     Tooling,
     Gameplay,
-    UI
+    UI,
+    DontDestroy
 }

@@ -66,9 +66,7 @@ public class SceneLoader : Singleton<SceneLoader>
 
     private async UniTask LoadNextScene()
     {
-        string name = _groupHandler.GetActiveSceneName();
-        
-        await SceneManager.UnloadSceneAsync(name);
+        await _groupHandler.UnloadScenes();
         
         _currentSceneIndex++;
 

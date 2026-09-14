@@ -13,7 +13,12 @@ public class SceneGroup
     
     public string FindSceneNameByType(SceneType sceneType)
     {
-        return _scenes.FirstOrDefault(scene => scene.SceneType == sceneType)?.Name;
+        foreach (var scene in _scenes.Where(scene => scene.HasSceneType(sceneType)))
+        {
+            return scene.Name;
+        }
+
+        throw new KeyNotFoundException($"There are no scene with type {sceneType}");
     }
 
     public List<SceneData> GetScenes()

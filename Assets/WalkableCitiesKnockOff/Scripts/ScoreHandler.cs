@@ -11,8 +11,8 @@ public class ScoreHandler : Singleton<ScoreHandler>
     
     private IPlayer _player;
     
-    private int _currentStepCount;
-    private int _wholeAmount;
+    private static int s_currentStepCount;
+    private static int s_wholeAmount;
     
     private void OnEnable()
     {
@@ -27,8 +27,9 @@ public class ScoreHandler : Singleton<ScoreHandler>
     {
         _player.Stepped -= OnStep;
         Game.RequestedRestart -= Restore;
-        
-        Restore();
+
+        s_currentStepCount = 0;
+        s_wholeAmount = 0;
     }
 
     public void Restore()
@@ -38,26 +39,25 @@ public class ScoreHandler : Singleton<ScoreHandler>
         _player = Game.GetPlayer();
         
         _player.Stepped += OnStep;
+
+        s_wholeAmount -= s_currentStepCount;
         
-        _currentStepCount = 0;
+        s_currentStepCount = 0;
         
         UpdateText();
-    }
-
-    public void CalculateTotalScore()
-    {
-        _wholeAmount += _currentStepCount;
     }
     
     private void OnStep()
     {
-        _currentStepCount++;
+        s_wholeAmount++;
+        
+        s_currentStepCount++;
         
         UpdateText();
     }
 
     private void UpdateText()
     {
-        _text.text = $"Score: {_currentStepCount}";
+        _text.text = $"Score: {s_currentStepCount}";
     }
 }
