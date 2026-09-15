@@ -8,10 +8,13 @@ public interface IPlayer
     public event Action<ISoundOwner> HitSoundOwner;
     public event Action RequestedRestart;
     public event Action Stepped;
+    
     public Vector2 CurrentPosition { get; }
     public bool IsAccepting { get; }
     public string AcceptButton { get; }
     public string RestartButton { get; }
     public string ChangeFootButton { get; }
-    void SetPosition(Vector3 spawnPointPosition);
+    
+    void Set(Vector3 spawnPointPosition);
+    void Set(Quaternion spawnPointRotation);
 }

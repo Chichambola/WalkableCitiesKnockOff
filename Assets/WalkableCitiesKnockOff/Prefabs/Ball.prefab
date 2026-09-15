@@ -214,4 +214,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 0
+  _isTrigger: 0
   _soundHandler: {fileID: 0}

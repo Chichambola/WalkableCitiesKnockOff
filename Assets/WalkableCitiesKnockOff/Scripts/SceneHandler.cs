@@ -26,7 +26,9 @@ public class SceneHandler : MonoBehaviour
     {
         _player = Game.GetPlayer();
         
-        _player.SetPosition(_spawnPoint.position);
+        _player.Set(_spawnPoint.position);
+
+        _player.Set(_spawnPoint.rotation);
         
         Loaded?.Invoke(_player);
     }

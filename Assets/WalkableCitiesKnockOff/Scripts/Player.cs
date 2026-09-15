@@ -84,10 +84,9 @@ public class Player : MonoBehaviour, IPlayer
         _collisionHandler.HitSoundOwner += OnHitSoundOwner;
     }
 
-    public void SetPosition(Vector3 spawnPointPosition)
-    {
-        transform.position = spawnPointPosition;
-    }
+    public void Set(Vector3 spawnPointPosition) => transform.position = spawnPointPosition;
+
+    public void Set(Quaternion rotation) => transform.rotation = rotation;
 
     public void Freeze()
     {
