@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -38,7 +39,6 @@ public class Player : MonoBehaviour, IPlayer
     private void OnValidate()
     {
         GetComponent<Rigidbody2D>().gravityScale = 0;
-        GetComponent<BoxCollider2D>().size = _body.transform.localScale;
     }
 
     private void OnEnable()
@@ -59,11 +59,6 @@ public class Player : MonoBehaviour, IPlayer
         }
         
         _inputReader.ResetPressed -= OnResetPressed;
-    }
-
-    private void OnDestroy()
-    {
-        _feetHandler.DestroyActiveFoot();
     }
 
     private void UnsubscribeEvents()
@@ -125,8 +120,12 @@ public class Player : MonoBehaviour, IPlayer
     private void OnHitKickable(IKickable kickable, Vector2 direction) => _kicker.Execute(direction, kickable);
     
     private void OnHitWall() => _rotator.SwitchDirection();
+
+    private void OnHitManyCollisions()
+    {
+        _rotator.SwitchDirection();
+    }
     
-    private void OnHitManyCollisions() => _rotator.SwitchDirection();
 
     private void OnHitSoundOwner(ISoundOwner soundOwner) => HitSoundOwner?.Invoke(soundOwner);
 }

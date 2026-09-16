@@ -132,6 +132,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WallSounds
       objectReference: {fileID: 0}
+    - target: {fileID: 5553800395914650636, guid: 5dce3888d3c8eb0e3add7a76c76654dc, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7081918830000418769, guid: 5dce3888d3c8eb0e3add7a76c76654dc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -204,6 +208,10 @@ PrefabInstance:
     - target: {fileID: 5553800395914650636, guid: 5dce3888d3c8eb0e3add7a76c76654dc, type: 3}
       propertyPath: m_Name
       value: WallSounds
+      objectReference: {fileID: 0}
+    - target: {fileID: 5553800395914650636, guid: 5dce3888d3c8eb0e3add7a76c76654dc, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7081918830000418769, guid: 5dce3888d3c8eb0e3add7a76c76654dc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -371,9 +379,9 @@ GameObject:
   - component: {fileID: 303046158}
   - component: {fileID: 303046157}
   - component: {fileID: 303046156}
-  - component: {fileID: 303046155}
   - component: {fileID: 303046154}
-  m_Layer: 0
+  - component: {fileID: 303046155}
+  m_Layer: 6
   m_Name: MiddleWallsTop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -394,7 +402,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 90488982}
-  m_Father: {fileID: 1554561226}
+  m_Father: {fileID: 974135427}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!66 &303046154
 CompositeCollider2D:
@@ -480,9 +488,9 @@ Rigidbody2D:
   m_GameObject: {fileID: 303046152}
   m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 1000000
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -495,7 +503,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!19719996 &303046157
 TilemapCollider2D:
@@ -681,7 +689,7 @@ GameObject:
   - component: {fileID: 974135430}
   - component: {fileID: 974135429}
   - component: {fileID: 974135428}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -702,6 +710,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 23450745}
+  - {fileID: 303046153}
+  - {fileID: 2119358547}
   m_Father: {fileID: 1486079103}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!66 &974135428
@@ -812,7 +822,7 @@ Rigidbody2D:
   m_GameObject: {fileID: 974135426}
   m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
@@ -827,7 +837,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!19719996 &974135431
 TilemapCollider2D:
@@ -1464,7 +1474,7 @@ Transform:
   m_GameObject: {fileID: 1390785894}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.9116172, w: 0.41104025}
-  m_LocalPosition: {x: -21.6, y: 4.5, z: 0}
+  m_LocalPosition: {x: -19.1, y: 1.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1514,41 +1524,7 @@ Transform:
   m_Children:
   - {fileID: 974135427}
   - {fileID: 1851120299}
-  - {fileID: 1554561226}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1554561225
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1554561226}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1554561226
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1554561225}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 303046153}
-  - {fileID: 2119358547}
-  m_Father: {fileID: 1486079103}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1636438125
 PrefabInstance:
@@ -1634,6 +1610,10 @@ PrefabInstance:
     - target: {fileID: 5553800395914650636, guid: 5dce3888d3c8eb0e3add7a76c76654dc, type: 3}
       propertyPath: m_Name
       value: WallSounds
+      objectReference: {fileID: 0}
+    - target: {fileID: 5553800395914650636, guid: 5dce3888d3c8eb0e3add7a76c76654dc, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7081918830000418769, guid: 5dce3888d3c8eb0e3add7a76c76654dc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1764,7 +1744,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1851120299
 Transform:
   m_ObjectHideFlags: 0
@@ -1819,25 +1799,7 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths:
-  - m_Collider: {fileID: 1851120303}
-    m_ColliderPaths:
-    - - X: 300476192
-        Y: 180476192
-      - X: 240476192
-        Y: 180476192
-      - X: 240476192
-        Y: 240476192
-      - X: 119523808
-        Y: 240476192
-      - X: 119523808
-        Y: 180476192
-      - X: -300476192
-        Y: 180476192
-      - X: -300476192
-        Y: -180476192
-      - X: 300476192
-        Y: -180476192
+  m_ColliderPaths: []
   m_CompositePaths:
     m_Paths:
     - - {x: 30.04759, y: -18.047619}
@@ -2676,9 +2638,9 @@ GameObject:
   - component: {fileID: 2119358552}
   - component: {fileID: 2119358551}
   - component: {fileID: 2119358550}
-  - component: {fileID: 2119358549}
   - component: {fileID: 2119358548}
-  m_Layer: 0
+  - component: {fileID: 2119358549}
+  m_Layer: 6
   m_Name: MiddleWallsBottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2699,7 +2661,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1703135695}
-  m_Father: {fileID: 1554561226}
+  m_Father: {fileID: 974135427}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!66 &2119358548
 CompositeCollider2D:
@@ -2785,9 +2747,9 @@ Rigidbody2D:
   m_GameObject: {fileID: 2119358546}
   m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 1000000
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -2800,7 +2762,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!19719996 &2119358551
 TilemapCollider2D:

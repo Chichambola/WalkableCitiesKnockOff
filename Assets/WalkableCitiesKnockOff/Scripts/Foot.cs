@@ -11,8 +11,12 @@ public class Foot : MonoBehaviour
     private Collider2D _collider;
     private Vector3 _initialPosition;
     private Quaternion _defaultRotation = new (0f, 0f, 0f,0f);
+    private RaycastHit2D[] _results;
 
     public bool IsActive => _isActive;
+    public Vector2 Size => transform.lossyScale;
+    public Vector2 Position => transform.position;
+    public float ZAngle => transform.localRotation.z; 
 
     private void Awake()
     {
@@ -45,5 +49,10 @@ public class Foot : MonoBehaviour
     {
         transform.parent = parent;
         transform.rotation = _defaultRotation;
+    }
+
+    public void Set(Vector3 position)
+    {
+        transform.position = position;
     }
 }
