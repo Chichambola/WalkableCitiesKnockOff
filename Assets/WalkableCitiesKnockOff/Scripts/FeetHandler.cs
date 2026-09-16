@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -9,31 +11,14 @@ public class FeetHandler : MonoBehaviour
     [SerializeField] private Foot _leftFoot;
     [SerializeField] private Foot _rightFoot;
     [SerializeField] private StepVerifier _stepVerifier;
-    [SerializeField] private int _recordStepFrameCount = 15;
-
+    
+    public event Action Stuck;
+    
     private Foot _activeFoot;
     private Foot _inactiveFoot;
     private Vector3 _lastPosition;
-    private int _startFrame;
-
-    private void Start()
-    {
-        _startFrame = Time.frameCount;
-    }
-
-    private void Update()
-    {
-        if (_inactiveFoot == null)
-            return;
-        
-        int framesPassed = Time.frameCount - _startFrame;
-        
-        if (framesPassed >= _recordStepFrameCount)
-        {
-            _lastPosition = _inactiveFoot.Position;
-        }
-    }
-
+    private Quaternion _lastRotation;
+    
     private void OnValidate()
     {
         if (!_leftFoot.IsActive && !_rightFoot.IsActive)
@@ -52,10 +37,10 @@ public class FeetHandler : MonoBehaviour
     public Vector3 GetPosition()
     {
         Vector3 position;
-
-        if (_inactiveFoot != null && !_stepVerifier.CanPlace(_inactiveFoot.Position, _inactiveFoot.Size, _inactiveFoot.ZAngle))
+        
+        if (_inactiveFoot!= null && !_stepVerifier.CanPlace(_inactiveFoot.Position, _inactiveFoot.Size, _inactiveFoot.ZAngle))
         {
-            _inactiveFoot.Set(_lastPosition);
+            Stuck?.Invoke();
         }
         
         if (_leftFoot.IsActive)
@@ -82,7 +67,7 @@ public class FeetHandler : MonoBehaviour
             
             position = _leftFoot.Position;
         }
-
+        
         return position;
     }
 }

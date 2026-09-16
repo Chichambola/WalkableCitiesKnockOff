@@ -29,6 +29,6 @@ public class AudioHandler : Singleton<AudioHandler>
     {
         var sound = soundOwner.GetSound();
         
-        AudioSource.PlayClipAtPoint(sound, _player.CurrentPosition, _volume);
+        AudioSource.PlayClipAtPoint(sound, _player.Position, _volume);
     }
 }

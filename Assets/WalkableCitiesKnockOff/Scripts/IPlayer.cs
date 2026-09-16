@@ -9,7 +9,7 @@ public interface IPlayer
     public event Action RequestedRestart;
     public event Action Stepped;
     
-    public Vector2 CurrentPosition { get; }
+    public Vector2 Position { get; }
     public bool IsAccepting { get; }
     public string AcceptButton { get; }
     public string RestartButton { get; }

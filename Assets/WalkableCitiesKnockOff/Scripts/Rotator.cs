@@ -21,10 +21,7 @@ public class Rotator : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!_rigidbody.IsSleeping())
-        {
-            _rigidbody.transform.RotateAround(_rotatePoint, _spinDirection, _spinSpeed * Time.fixedDeltaTime);
-        }
+        _rigidbody.transform.RotateAround(_rotatePoint, _spinDirection, _spinSpeed * Time.fixedDeltaTime);
     }
     
     public void SwitchPosition()

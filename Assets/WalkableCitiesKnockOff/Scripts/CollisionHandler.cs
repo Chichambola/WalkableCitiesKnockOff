@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -11,24 +12,14 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] private float _maxCollisionFrames = 50f;
     
     public event Action HitWall;
-    public event Action HitManyCollisons;
-    public event Action LeftCollider;
+    public event Action Stuck;
     public event Action<IKickable, Vector2> HitKickable;
     public event Action<ISoundOwner> HitSoundOwner;
     
-    private float _collisionCount;
     private Collider2D _collider;
-    private float _triggerCount;
-    private int _startFrame;
-
     private void Awake()
     {
         _collider = GetComponent<Collider2D>();
-    }
-
-    private void Start()
-    {
-        _startFrame = Time.frameCount;
     }
     
     private void OnCollisionEnter2D(Collision2D other)
@@ -54,20 +45,10 @@ public class CollisionHandler : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay2D(Collision2D other)
+    private async void OnCollisionStay(Collision other)
     {
-        CalculateFrames();
-    } 
-    
-    private void CalculateFrames()
-    {
-        int framesPassed = Time.frameCount - _startFrame;
+        await UniTask.Delay(TimeSpan.FromTicks(10));
 
-        if (framesPassed >= _maxCollisionFrames)
-        {
-            _startFrame = Time.frameCount;
-            _collider.enabled = false;
-            HitManyCollisons?.Invoke();
-        }
+        Stuck?.Invoke();
     }
 }

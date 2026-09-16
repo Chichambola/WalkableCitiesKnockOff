@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using NUnit.Framework;
 using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class Player : MonoBehaviour, IPlayer
+public class Player : MonoBehaviour, IPlayer, ICapturable
 {
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private FeetHandler _feetHandler;
@@ -15,16 +17,17 @@ public class Player : MonoBehaviour, IPlayer
     [SerializeField] private CollisionHandler _collisionHandler;
     [SerializeField] private SoundVerifier _soundVerifier;
     [SerializeField] private Transform _body;
-
+    [SerializeField] private StateSaver _stateSaver;
+    
     public event Action RequestedRestart;
     public event Action<ISoundOwner> HitSoundOwner;
     public event Action Stepped;
     
     private Rigidbody2D _rigidbody;
-    private float _count;
     private bool _isFrozen;
 
-    public Vector2 CurrentPosition => transform.position;
+    public Vector2 Position => transform.position;
+    public Quaternion Rotation => transform.rotation;
     public bool IsAccepting => _inputReader.IsHoldingAccept;
     public bool HasPressedKey { get; private set; }
     public string AcceptButton => _inputReader.AcceptButton;
@@ -40,9 +43,11 @@ public class Player : MonoBehaviour, IPlayer
     {
         GetComponent<Rigidbody2D>().gravityScale = 0;
     }
-
+    
     private void OnEnable()
     {
+        _stateSaver.Execute(this);
+        
         SubscribeEvents();
 
         _inputReader.ResetPressed += OnResetPressed;
@@ -60,23 +65,25 @@ public class Player : MonoBehaviour, IPlayer
         
         _inputReader.ResetPressed -= OnResetPressed;
     }
-
-    private void UnsubscribeEvents()
-    {
-        _inputReader.ChangeKeyPressed -= OnChangeKeyPressed;
-        _collisionHandler.HitKickable -= OnHitKickable;
-        _collisionHandler.HitWall -= OnHitWall;
-        _collisionHandler.HitManyCollisons -= OnHitManyCollisions;
-        _collisionHandler.HitSoundOwner -= OnHitSoundOwner;
-    }
     
     private void SubscribeEvents()
     {
         _inputReader.ChangeKeyPressed += OnChangeKeyPressed;
         _collisionHandler.HitKickable += OnHitKickable;
         _collisionHandler.HitWall += OnHitWall;
-        _collisionHandler.HitManyCollisons += OnHitManyCollisions;
         _collisionHandler.HitSoundOwner += OnHitSoundOwner;
+        _collisionHandler.Stuck += OnStuck;
+        _feetHandler.Stuck += OnStuck;
+    }
+    
+    private void UnsubscribeEvents()
+    {
+        _inputReader.ChangeKeyPressed -= OnChangeKeyPressed;
+        _collisionHandler.HitKickable -= OnHitKickable;
+        _collisionHandler.HitWall -= OnHitWall;
+        _collisionHandler.HitSoundOwner -= OnHitSoundOwner;
+        _collisionHandler.Stuck -= OnStuck;
+        _feetHandler.Stuck -= OnStuck;
     }
 
     public void Set(Vector3 spawnPointPosition) => transform.position = spawnPointPosition;
@@ -99,13 +106,9 @@ public class Player : MonoBehaviour, IPlayer
     
     private void OnChangeKeyPressed()
     {
-        _rigidbody.Sleep();
-        
         Vector3 value = _feetHandler.GetPosition();
         _rotator.SetPoint(value);
         _rotator.SwitchPosition();
-        
-        _rigidbody.WakeUp();
         
         Stepped?.Invoke();
         
@@ -125,7 +128,14 @@ public class Player : MonoBehaviour, IPlayer
     {
         _rotator.SwitchDirection();
     }
-    
 
+    private void OnStuck()
+    {
+        transform.position = _stateSaver.GetPosition();
+        transform.rotation = _stateSaver.GetRotation();
+        
+        _rotator.SwitchDirection();
+    }
+    
     private void OnHitSoundOwner(ISoundOwner soundOwner) => HitSoundOwner?.Invoke(soundOwner);
 }

@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 8352914855604755305}
   - component: {fileID: 3633659335933790250}
   - component: {fileID: 4846191612494195736}
+  - component: {fileID: 4801142212614157269}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -63,6 +64,7 @@ MonoBehaviour:
   _collisionHandler: {fileID: 8352914855604755305}
   _soundVerifier: {fileID: 5121270373160163906}
   _body: {fileID: 8868095633379090122}
+  _stateSaver: {fileID: 4801142212614157269}
 --- !u!114 &4757193081278464017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,7 +93,6 @@ MonoBehaviour:
   _leftFoot: {fileID: 1507596935450313246}
   _rightFoot: {fileID: 7359873633250927551}
   _stepVerifier: {fileID: 8042534178077644962}
-  _recordStepFrameCount: 5
 --- !u!114 &8042534178077644962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,7 +105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3305755b768646b9929a52863be2b9a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _checkDistance: 1
+  _checkDistance: 300
   _amountCollidersToDetect: 50
   _filter:
     useTriggers: 1
@@ -258,6 +259,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2.9644156, y: 0.5922775}
   m_EdgeRadius: 0
+--- !u!114 &4801142212614157269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2532486483670396583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b9106ee7fbe3b4c69a731ee46835a28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interval: 0.2
 --- !u!1 &5322327105313107151
 GameObject:
   m_ObjectHideFlags: 0
@@ -388,6 +402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be70c19e74fb4fd4ca281b5b7093fb98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stateSaver: {fileID: 0}
   _isActive: 0
 --- !u!212 &541279118351098860
 SpriteRenderer:
@@ -533,6 +548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be70c19e74fb4fd4ca281b5b7093fb98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stateSaver: {fileID: 0}
   _isActive: 1
 --- !u!212 &7880418269690312777
 SpriteRenderer:

@@ -402,7 +402,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 90488982}
-  m_Father: {fileID: 974135427}
+  m_Father: {fileID: 1486079103}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!66 &303046154
 CompositeCollider2D:
@@ -695,7 +695,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &974135427
 Transform:
   m_ObjectHideFlags: 0
@@ -710,8 +710,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 23450745}
-  - {fileID: 303046153}
-  - {fileID: 2119358547}
   m_Father: {fileID: 1486079103}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!66 &974135428
@@ -752,33 +750,7 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths:
-  - m_Collider: {fileID: 974135431}
-    m_ColliderPaths:
-    - - X: 360476192
-        Y: 240476192
-      - X: 239523808
-        Y: 240476192
-      - X: 239523808
-        Y: 179523808
-      - X: 299523808
-        Y: 179523808
-      - X: 299523808
-        Y: -179523808
-      - X: -299523808
-        Y: -179523808
-      - X: -299523808
-        Y: 179523808
-      - X: 120476192
-        Y: 179523808
-      - X: 120476192
-        Y: 240476192
-      - X: -360476192
-        Y: 240476192
-      - X: -360476192
-        Y: -240476192
-      - X: 360476192
-        Y: -240476192
+  m_ColliderPaths: []
   m_CompositePaths:
     m_Paths:
     - - {x: 36.047592, y: -24.047619}
@@ -1522,6 +1494,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2119358547}
+  - {fileID: 303046153}
   - {fileID: 974135427}
   - {fileID: 1851120299}
   m_Father: {fileID: 0}
@@ -2661,7 +2635,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1703135695}
-  m_Father: {fileID: 974135427}
+  m_Father: {fileID: 1486079103}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!66 &2119358548
 CompositeCollider2D:

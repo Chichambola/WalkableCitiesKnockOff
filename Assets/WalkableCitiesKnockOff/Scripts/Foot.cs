@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class Foot : MonoBehaviour
 {
+    [SerializeField] private StateSaver _stateSaver;
     [SerializeField] private bool _isActive;
     
     private Collider2D _collider;
@@ -15,8 +16,9 @@ public class Foot : MonoBehaviour
 
     public bool IsActive => _isActive;
     public Vector2 Size => transform.lossyScale;
+    public float ZAngle => transform.localRotation.z;
     public Vector2 Position => transform.position;
-    public float ZAngle => transform.localRotation.z; 
+    public Quaternion Rotation => transform.rotation;
 
     private void Awake()
     {
@@ -49,10 +51,5 @@ public class Foot : MonoBehaviour
     {
         transform.parent = parent;
         transform.rotation = _defaultRotation;
-    }
-
-    public void Set(Vector3 position)
-    {
-        transform.position = position;
     }
 }
