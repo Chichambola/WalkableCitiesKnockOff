@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -10,24 +11,48 @@ using Random = UnityEngine.Random;
 
 public class StateSaver : Singleton<StateSaver>
 {
-    [SerializeField] private float _interval = .5f;
+    [SerializeField] private float _initialInterval = .5f;
 
-    private static Dictionary<ICapturable, CapturableState> s_capturables = new ();
+    private static Dictionary<ICapturable, CapturableState> s_capturables;
     private CancellationTokenSource _cts;
-    
+    private static float _currentInterval;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        _currentInterval = _initialInterval;
+        
+        s_capturables = new Dictionary<ICapturable, CapturableState>();
+    }
+
     private void OnEnable()
     {
+        Game.RequestedRestart += OnRestart;
+        
         _cts = new CancellationTokenSource();
         
         CaptureLastStateTask(_cts.Token).Forget();
+    }
+
+    private void OnDisable()
+    {
+        Game.RequestedRestart -= OnRestart;
     }
 
     private void OnDestroy()
     {
         _cts?.Cancel();
         _cts?.Dispose();
+        
+        s_capturables.Clear();
     }
 
+    private void OnRestart()
+    {
+        s_capturables.Clear();
+    }
+    
     public static void Register(ICapturable capturable)
     {
         CapturableState capturableState = new CapturableState(capturable.Position, capturable.Rotation);
@@ -37,9 +62,11 @@ public class StateSaver : Singleton<StateSaver>
 
     public static CapturableState GetState(ICapturable capturable)
     {
-        if (!s_capturables.TryGetValue(capturable, out var value))
+        if (!s_capturables.ContainsKey(capturable))
             throw new ExternalException($"This object was not registered!");
-
+        
+        var value = s_capturables.GetValueOrDefault(capturable);
+        
         return value;
     }
     
@@ -48,14 +75,14 @@ public class StateSaver : Singleton<StateSaver>
         while (!token.IsCancellationRequested)
         {
             if (s_capturables.Count == 0)
-                await UniTask.Delay(TimeSpan.FromSeconds(_interval), cancellationToken: token);
-
-            foreach (var kvp in s_capturables)
+                await UniTask.Delay(TimeSpan.FromSeconds(_currentInterval), cancellationToken: token);
+            
+            foreach (var kvp in s_capturables.ToList())
             {
                 s_capturables[kvp.Key] = new CapturableState(kvp.Key.Position, kvp.Key.Rotation);
             }
 
-            await UniTask.Delay(TimeSpan.FromSeconds(_interval), cancellationToken: token);
+            await UniTask.Delay(TimeSpan.FromSeconds(_currentInterval), cancellationToken: token);
         }
     }
 }
