@@ -17,7 +17,7 @@ public class Player : MonoBehaviour, IPlayer, ICapturable
     [SerializeField] private CollisionHandler _collisionHandler;
     [SerializeField] private SoundVerifier _soundVerifier;
     [SerializeField] private Transform _body;
-    [SerializeField] private StateSaver _stateSaver;
+    [SerializeField] private StuckPreventor _stuckPreventor;
     
     public event Action RequestedRestart;
     public event Action<ISoundOwner> HitSoundOwner;
@@ -29,7 +29,6 @@ public class Player : MonoBehaviour, IPlayer, ICapturable
     public Vector2 Position => transform.position;
     public Quaternion Rotation => transform.rotation;
     public bool IsAccepting => _inputReader.IsHoldingAccept;
-    public bool HasPressedKey { get; private set; }
     public string AcceptButton => _inputReader.AcceptButton;
     public string RestartButton => _inputReader.RestartButton;
     public string ChangeFootButton => _inputReader.ChangeFootButton;
@@ -46,13 +45,13 @@ public class Player : MonoBehaviour, IPlayer, ICapturable
     
     private void OnEnable()
     {
-        _stateSaver.Execute(this);
+        StateSaver.Register(this);
         
         SubscribeEvents();
 
         _inputReader.ResetPressed += OnResetPressed;
+        _stuckPreventor.DetectedOverlap += OnDetectedOverlap;
         
-        HasPressedKey = false;
         _isFrozen = false;
     }
 
@@ -64,16 +63,15 @@ public class Player : MonoBehaviour, IPlayer, ICapturable
         }
         
         _inputReader.ResetPressed -= OnResetPressed;
+        _stuckPreventor.DetectedOverlap -= OnDetectedOverlap;
     }
-    
+
     private void SubscribeEvents()
     {
         _inputReader.ChangeKeyPressed += OnChangeKeyPressed;
         _collisionHandler.HitKickable += OnHitKickable;
         _collisionHandler.HitWall += OnHitWall;
         _collisionHandler.HitSoundOwner += OnHitSoundOwner;
-        _collisionHandler.Stuck += OnStuck;
-        _feetHandler.Stuck += OnStuck;
     }
     
     private void UnsubscribeEvents()
@@ -82,8 +80,6 @@ public class Player : MonoBehaviour, IPlayer, ICapturable
         _collisionHandler.HitKickable -= OnHitKickable;
         _collisionHandler.HitWall -= OnHitWall;
         _collisionHandler.HitSoundOwner -= OnHitSoundOwner;
-        _collisionHandler.Stuck -= OnStuck;
-        _feetHandler.Stuck -= OnStuck;
     }
 
     public void Set(Vector3 spawnPointPosition) => transform.position = spawnPointPosition;
@@ -123,19 +119,39 @@ public class Player : MonoBehaviour, IPlayer, ICapturable
     private void OnHitKickable(IKickable kickable, Vector2 direction) => _kicker.Execute(direction, kickable);
     
     private void OnHitWall() => _rotator.SwitchDirection();
-
-    private void OnHitManyCollisions()
-    {
-        _rotator.SwitchDirection();
-    }
-
-    private void OnStuck()
-    {
-        transform.position = _stateSaver.GetPosition();
-        transform.rotation = _stateSaver.GetRotation();
-        
-        _rotator.SwitchDirection();
-    }
     
     private void OnHitSoundOwner(ISoundOwner soundOwner) => HitSoundOwner?.Invoke(soundOwner);
+    
+    private void OnDetectedOverlap(Vector2 separation)
+    {
+        Debug.Log("Detected");
+        
+        ResetToLastState();
+
+        _rotator.ResetToLastState();
+        _feetHandler.ResetToLastState();
+        
+        return;
+        
+        Vector3 correctSeparation = new Vector3(separation.x, separation.y, 0);
+        
+        Vector3 currentPos = new Vector3(_feetHandler.Position.x, _feetHandler.Position.y, 0);
+        
+        transform.position += correctSeparation;
+        
+        currentPos += correctSeparation;
+        _feetHandler.Set(currentPos);
+
+        //currentPos = new Vector3(_rotator.CurrentRotatePoint.x, _rotator.CurrentRotatePoint.y, 0);
+        currentPos += correctSeparation;
+        _rotator.SetPoint(currentPos);
+    }
+
+    public void ResetToLastState()
+    {
+        var value = StateSaver.GetState(this);
+        
+        transform.position = value.Position;
+        transform.rotation = value.Rotation;
+    }
 }

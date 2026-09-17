@@ -5,20 +5,31 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEditorInternal;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class FeetHandler : MonoBehaviour
+public class FeetHandler : MonoBehaviour, ICapturable
 {
     [SerializeField] private Foot _leftFoot;
     [SerializeField] private Foot _rightFoot;
-    [SerializeField] private StepVerifier _stepVerifier;
-    
-    public event Action Stuck;
     
     private Foot _activeFoot;
     private Foot _inactiveFoot;
     private Vector3 _lastPosition;
     private Quaternion _lastRotation;
-    
+
+    public Vector2 Position => _activeFoot.Position;
+    public Quaternion Rotation => _activeFoot.Rotation;
+
+    private void Awake()
+    {
+        _activeFoot = _leftFoot.IsActive ? _leftFoot : _rightFoot;
+    }
+
+    private void OnEnable()
+    {
+        StateSaver.Register(this);
+    }
+
     private void OnValidate()
     {
         if (!_leftFoot.IsActive && !_rightFoot.IsActive)
@@ -37,11 +48,6 @@ public class FeetHandler : MonoBehaviour
     public Vector3 GetPosition()
     {
         Vector3 position;
-        
-        if (_inactiveFoot!= null && !_stepVerifier.CanPlace(_inactiveFoot.Position, _inactiveFoot.Size, _inactiveFoot.ZAngle))
-        {
-            Stuck?.Invoke();
-        }
         
         if (_leftFoot.IsActive)
         {
@@ -69,5 +75,18 @@ public class FeetHandler : MonoBehaviour
         }
         
         return position;
+    }
+
+    public void Set(Vector3 pos)
+    {
+        _activeFoot.transform.position = pos;
+    }
+
+    public void ResetToLastState()
+    {
+        var value = StateSaver.GetState(this);
+        
+        _activeFoot.transform.position = value.Position;
+        _activeFoot.transform.rotation = value.Rotation;
     }
 }

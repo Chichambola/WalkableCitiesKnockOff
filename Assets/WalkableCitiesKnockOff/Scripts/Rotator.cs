@@ -5,25 +5,41 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class Rotator : MonoBehaviour
+public class Rotator : MonoBehaviour, ICapturable
 {
-    [SerializeField] private float _spinSpeed = 2;
+    [SerializeField] private float _spinSpeed = 200;
 
     private bool _isFlipped;
     private Rigidbody2D _rigidbody;
     private Vector3 _rotatePoint;
     private Vector3 _spinDirection;
+
+   // public Vector3 CurrentRotatePoint => _rotatePoint;
+    public Vector2 Position => _rotatePoint;
+    public Quaternion Rotation => transform.rotation;
     
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 
+    private void OnEnable()
+    {
+        StateSaver.Register(this);   
+    }
+
     private void FixedUpdate()
     {
         _rigidbody.transform.RotateAround(_rotatePoint, _spinDirection, _spinSpeed * Time.fixedDeltaTime);
     }
-    
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        Gizmos.DrawSphere(_rotatePoint, 1f);
+    }
+
     public void SwitchPosition()
     {
         if (_isFlipped)
@@ -45,4 +61,11 @@ public class Rotator : MonoBehaviour
     }
     
     public void SetPoint(Vector3 point) => _rotatePoint = point;
+
+    public void ResetToLastState()
+    {
+        var value = StateSaver.GetState(this);
+        
+        transform.position = value.Position;
+    }
 }

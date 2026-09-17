@@ -6,17 +6,13 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class Foot : MonoBehaviour
 {
-    [SerializeField] private StateSaver _stateSaver;
     [SerializeField] private bool _isActive;
     
     private Collider2D _collider;
     private Vector3 _initialPosition;
     private Quaternion _defaultRotation = new (0f, 0f, 0f,0f);
-    private RaycastHit2D[] _results;
 
     public bool IsActive => _isActive;
-    public Vector2 Size => transform.lossyScale;
-    public float ZAngle => transform.localRotation.z;
     public Vector2 Position => transform.position;
     public Quaternion Rotation => transform.rotation;
 

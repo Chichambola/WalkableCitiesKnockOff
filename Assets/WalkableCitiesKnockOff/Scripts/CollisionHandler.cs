@@ -12,7 +12,6 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] private float _maxCollisionFrames = 50f;
     
     public event Action HitWall;
-    public event Action Stuck;
     public event Action<IKickable, Vector2> HitKickable;
     public event Action<ISoundOwner> HitSoundOwner;
     
@@ -43,12 +42,5 @@ public class CollisionHandler : MonoBehaviour
                 HitSoundOwner?.Invoke(soundOwner);
             }
         }
-    }
-
-    private async void OnCollisionStay(Collision other)
-    {
-        await UniTask.Delay(TimeSpan.FromTicks(10));
-
-        Stuck?.Invoke();
     }
 }

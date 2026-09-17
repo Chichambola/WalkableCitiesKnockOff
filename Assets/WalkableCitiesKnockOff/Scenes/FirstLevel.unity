@@ -1004,7 +1004,7 @@ GameObject:
   - component: {fileID: 1170916324}
   - component: {fileID: 1170916326}
   - component: {fileID: 1170916325}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
