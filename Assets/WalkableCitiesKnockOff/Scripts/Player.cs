@@ -133,6 +133,8 @@ public class Player : MonoBehaviour, IPlayer, ICapturable, IStuckDetector
         _rotator.ResetToLastState();
         _feetHandler.ResetToLastState();
         
+        _feetHandler.
+        
         _rotator.SwitchDirection();
         
         return;

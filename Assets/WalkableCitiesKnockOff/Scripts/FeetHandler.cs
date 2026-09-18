@@ -5,9 +5,10 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
-public class FeetHandler : MonoBehaviour
+public class FeetHandler : MonoBehaviour, IStuckDetector
 {
     [SerializeField] private Foot _leftFoot;
     [SerializeField] private Foot _rightFoot;
@@ -19,7 +20,6 @@ public class FeetHandler : MonoBehaviour
     private IStuckDetector _stuckDetector;
 
     public Vector2 Position => _activeFoot.Position;
-    public Quaternion Rotation => _activeFoot.Rotation;
     public bool IsStuck => _stuckDetector.IsStuck;
 
     public void Init(IStuckDetector stuckDetector)
@@ -29,12 +29,19 @@ public class FeetHandler : MonoBehaviour
     
     private void Awake()
     {
-        _activeFoot = _leftFoot.IsActive ? _leftFoot : _rightFoot;
-    }
-
-    private void OnEnable()
-    {
-        StateSaver.Register(this);
+        if (_leftFoot.IsActive)
+        {
+            _activeFoot = _leftFoot;
+            _inactiveFoot = _rightFoot;
+        }
+        else
+        {
+            _activeFoot = _rightFoot;
+            _inactiveFoot = _leftFoot;
+        }
+        
+        _activeFoot.Init(this);
+        _inactiveFoot.Init(this);
     }
 
     private void OnValidate()
@@ -52,6 +59,16 @@ public class FeetHandler : MonoBehaviour
             Destroy(_activeFoot.gameObject);
     }
 
+    public void Switch()
+    {
+        
+    }
+
+    private void Set()
+    {
+        
+    }
+    
     public Vector3 GetPosition()
     {
         Vector3 position;
@@ -91,9 +108,7 @@ public class FeetHandler : MonoBehaviour
 
     public void ResetToLastState()
     {
-        var value = StateSaver.GetState(this);
-        
-        _activeFoot.transform.position = value.Position;
-        _activeFoot.transform.rotation = value.Rotation;
+        _activeFoot.ResetToLastState();
+        _inactiveFoot.ResetToLastState();
     }
 }
