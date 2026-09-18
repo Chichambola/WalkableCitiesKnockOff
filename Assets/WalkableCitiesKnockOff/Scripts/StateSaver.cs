@@ -50,7 +50,13 @@ public class StateSaver : Singleton<StateSaver>
 
     private void OnRestart()
     {
+        _cts?.Cancel();
+        
         s_capturables.Clear();
+
+        _cts = new CancellationTokenSource();
+        
+        CaptureLastStateTask(_cts.Token).Forget();
     }
     
     public static void Register(ICapturable capturable)
@@ -76,13 +82,25 @@ public class StateSaver : Singleton<StateSaver>
         {
             if (s_capturables.Count == 0)
                 await UniTask.Delay(TimeSpan.FromSeconds(_currentInterval), cancellationToken: token);
+
+            var kvpList = s_capturables.ToList();
             
-            foreach (var kvp in s_capturables.ToList())
+            foreach (var kvp in kvpList)
             {
                 s_capturables[kvp.Key] = new CapturableState(kvp.Key.Position, kvp.Key.Rotation);
             }
 
             await UniTask.Delay(TimeSpan.FromSeconds(_currentInterval), cancellationToken: token);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        
+        foreach (var kvp in s_capturables.Values)
+        {
+            Gizmos.DrawSphere(kvp.Position, 1f);
         }
     }
 }

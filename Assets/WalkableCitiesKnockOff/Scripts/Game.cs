@@ -7,6 +7,7 @@ using TMPro;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor.Profiling;
+using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
@@ -18,6 +19,7 @@ public class Game : Singleton<Game>
     [SerializeField] private AudioHandler _audioHandler;
 
     public static event Action RequestedRestart;
+    public static event Action<IPlayer> Loaded;
     public static event Func<UniTask> RequestedNextLevel;
     
     private static float s_normalTime = 1f;
@@ -35,9 +37,7 @@ public class Game : Singleton<Game>
     {
         Time.timeScale = s_normalTime;
         
-        CreatePlayer();
-        
-        InitializeServices();
+        PerformLevelStart();
         
         EndOfLevelHandler.RequestedEndOfLevel += LoadNextLevel;
         SceneLoader.Loaded += OnAllScenesLoaded;
@@ -60,28 +60,31 @@ public class Game : Singleton<Game>
     public static void Resume()
     {
         Time.timeScale = s_normalTime;
-        
-        s_player.UnFreeze();
-    }
 
-    public static Player GetPlayer() => s_player;
+        if (s_player != null)
+            s_player.UnFreeze();
+    }
     
     private void LoadNextLevel()
     {
+        RequestedNextLevel?.Invoke();
+        
         PerformLevelStart();
         
         s_player.Freeze();
-
-        RequestedNextLevel?.Invoke();
+        
+        Loaded?.Invoke(s_player);
     }
 
     private void Restart()
     {
-        PerformLevelStart();
-        
         RequestedRestart?.Invoke();
         
+        PerformLevelStart();
+        
         s_player.UnFreeze();
+        
+        Loaded?.Invoke(s_player);
     }
     
     private void CreatePlayer()
@@ -119,5 +122,7 @@ public class Game : Singleton<Game>
     private void OnAllScenesLoaded()
     {
         s_player.UnFreeze();
+        
+        Loaded?.Invoke(s_player);
     }
 }

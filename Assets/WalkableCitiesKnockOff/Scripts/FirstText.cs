@@ -21,14 +21,11 @@ public class FirstText : MonoBehaviour
     {
         _sceneHandler.Loaded -= OnSceneHandlerLoaded;
     }
-
-    private void Start()
-    {
-        _text.text = $"Press {_player.ChangeFootButton.ToUpper()} to start.";
-    }
     
     private void OnSceneHandlerLoaded(IPlayer player)
     {
         _player = player;
+        
+        _text.text = $"Press {_player.ChangeFootButton.ToUpper()} to start.";
     }
 }

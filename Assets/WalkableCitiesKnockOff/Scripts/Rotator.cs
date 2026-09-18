@@ -11,7 +11,7 @@ public class Rotator : MonoBehaviour, ICapturable
 
     private bool _isFlipped;
     private Rigidbody2D _rigidbody;
-    private Vector3 _rotatePoint;
+    private Vector2 _rotatePoint;
     private Vector3 _spinDirection;
 
    // public Vector3 CurrentRotatePoint => _rotatePoint;
@@ -30,7 +30,7 @@ public class Rotator : MonoBehaviour, ICapturable
 
     private void FixedUpdate()
     {
-        _rigidbody.transform.RotateAround(_rotatePoint, _spinDirection, _spinSpeed * Time.fixedDeltaTime);
+        transform.RotateAround(_rotatePoint, _spinDirection, _spinSpeed * Time.fixedDeltaTime);
     }
 
     private void OnDrawGizmos()
@@ -66,6 +66,6 @@ public class Rotator : MonoBehaviour, ICapturable
     {
         var value = StateSaver.GetState(this);
         
-        transform.position = value.Position;
+        SetPoint(value.Position);
     }
 }

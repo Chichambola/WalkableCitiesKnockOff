@@ -38,7 +38,7 @@ public class Foot : MonoBehaviour
     {
         _isActive = value;
 
-        _collider.enabled = !value;
+       // _collider.enabled = !value;
         
         transform.parent = null;
     }

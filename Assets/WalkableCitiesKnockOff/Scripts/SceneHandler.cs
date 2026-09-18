@@ -15,16 +15,24 @@ public class SceneHandler : MonoBehaviour
     
     private IPlayer _player;
 
+    private void Awake()
+    {
+        Game.Loaded += InitializePlayer;
+    }
+
+    private void OnDisable()
+    {
+        Game.Loaded -= InitializePlayer;
+    }
+
     private void Start()
     {
-        InitializePlayer();
-        
         EndOfLevelHandler.Init(_endOfLevel, EndOfLevelHandler.Instance as EndOfLevelHandler);
     }
 
-    private void InitializePlayer()
+    private void InitializePlayer(IPlayer player)
     {
-        _player = Game.GetPlayer();
+        _player = player;
         
         _player.Set(_spawnPoint.position);
 

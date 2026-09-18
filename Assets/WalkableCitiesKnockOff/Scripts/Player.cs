@@ -124,14 +124,14 @@ public class Player : MonoBehaviour, IPlayer, ICapturable
     
     private void OnDetectedOverlap(Vector2 separation)
     {
-        Debug.Log("Detected");
-        
         ResetToLastState();
 
         _rotator.ResetToLastState();
         _feetHandler.ResetToLastState();
         
         return;
+        
+        Debug.Log("Stuck");
         
         Vector3 correctSeparation = new Vector3(separation.x, separation.y, 0);
         
@@ -142,7 +142,7 @@ public class Player : MonoBehaviour, IPlayer, ICapturable
         currentPos += correctSeparation;
         _feetHandler.Set(currentPos);
 
-        //currentPos = new Vector3(_rotator.CurrentRotatePoint.x, _rotator.CurrentRotatePoint.y, 0);
+        currentPos = new Vector3(_rotator.Position.x, _rotator.Position.y, 0);
         currentPos += correctSeparation;
         _rotator.SetPoint(currentPos);
     }

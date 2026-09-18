@@ -17,22 +17,31 @@ public class ScoreHandler : Singleton<ScoreHandler>
     
     private void OnEnable()
     {
-        _player = Game.GetPlayer();
-        _player.Stepped += OnStep;
         Game.RequestedRestart += Restore;
         Game.RequestedNextLevel += OnRequestedNextLevel;
+        Game.Loaded += OnLoaded;
         
         UpdateText();
     }
 
     private void OnDisable()
     {
-        _player.Stepped -= OnStep;
         Game.RequestedRestart -= Restore;
         Game.RequestedNextLevel -= OnRequestedNextLevel;
+        Game.Loaded -= OnLoaded;
 
         s_currentStepCount = 0;
         s_wholeAmount = 0;
+    }
+    
+    private void OnLoaded(IPlayer player)
+    {
+        if (_player != null)
+            _player.Stepped -= OnStep;
+        
+        _player = player;
+
+        _player.Stepped += OnStep;
     }
 
     private async UniTask OnRequestedNextLevel()
@@ -44,12 +53,6 @@ public class ScoreHandler : Singleton<ScoreHandler>
 
     private void Restore()
     {
-        _player.Stepped -= OnStep;
-
-        _player = Game.GetPlayer();
-        
-        _player.Stepped += OnStep;
-
         s_wholeAmount -= s_currentStepCount;
         
         s_currentStepCount = 0;
