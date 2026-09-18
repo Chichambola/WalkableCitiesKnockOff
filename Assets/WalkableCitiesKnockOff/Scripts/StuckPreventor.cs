@@ -16,6 +16,9 @@ public class StuckPreventor : MonoBehaviour
     
     private Collider2D[] _colliders;
     private CancellationTokenSource _cts;
+
+    public bool IsStuck { get; private set; }
+
     
     private void Awake()
     {
@@ -43,13 +46,13 @@ public class StuckPreventor : MonoBehaviour
     {
         while (!token.IsCancellationRequested)
         {
+            int stuckCount = 0;
+            
             foreach (var collider in _collidersTocheck)
             {
-                await UniTask.WaitForFixedUpdate(token);
-            
                 var position = collider.transform.position;
 
-                var size = collider.size * _distance;
+                var size = collider.size;
 
                 var angle = collider.transform.rotation.eulerAngles.z;
             
@@ -61,16 +64,22 @@ public class StuckPreventor : MonoBehaviour
 
                     ColliderDistance2D dist = Physics2D.Distance(collider, hitCollider);
 
-                    if (dist.distance < -1.5f) 
+                    if (dist.distance < _distance) 
                     {
+                        stuckCount++;
+                        
                         Debug.Log(dist.distance);
                         
                         Vector2 separation = dist.normal * dist.distance;
-                    
+                        
                         DetectedOverlap?.Invoke(separation);
                     }
                 }
+                
+                await UniTask.WaitForFixedUpdate();
             }
+
+            IsStuck = stuckCount != 0;
         }
     }
 }

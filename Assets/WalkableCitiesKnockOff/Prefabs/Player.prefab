@@ -289,7 +289,7 @@ MonoBehaviour:
     minNormalAngle: 0
     maxNormalAngle: 0
   _amountToCheck: 166
-  _distance: 10
+  _distance: -0.8
 --- !u!1 &5322327105313107151
 GameObject:
   m_ObjectHideFlags: 0

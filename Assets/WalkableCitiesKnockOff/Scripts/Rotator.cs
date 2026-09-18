@@ -10,13 +10,19 @@ public class Rotator : MonoBehaviour, ICapturable
     [SerializeField] private float _spinSpeed = 200;
 
     private bool _isFlipped;
+    private IStuckDetector _stuckDetector;
     private Rigidbody2D _rigidbody;
     private Vector2 _rotatePoint;
     private Vector3 _spinDirection;
-
-   // public Vector3 CurrentRotatePoint => _rotatePoint;
+    
     public Vector2 Position => _rotatePoint;
     public Quaternion Rotation => transform.rotation;
+    public bool IsStuck => _stuckDetector.IsStuck;
+
+    public void Init(IStuckDetector stuckDetector)
+    {
+        _stuckDetector = stuckDetector;
+    }
     
     private void Awake()
     {

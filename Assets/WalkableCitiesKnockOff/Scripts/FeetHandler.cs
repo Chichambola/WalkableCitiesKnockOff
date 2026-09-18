@@ -7,7 +7,7 @@ using UnityEditorInternal;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class FeetHandler : MonoBehaviour, ICapturable
+public class FeetHandler : MonoBehaviour
 {
     [SerializeField] private Foot _leftFoot;
     [SerializeField] private Foot _rightFoot;
@@ -16,10 +16,17 @@ public class FeetHandler : MonoBehaviour, ICapturable
     private Foot _inactiveFoot;
     private Vector3 _lastPosition;
     private Quaternion _lastRotation;
+    private IStuckDetector _stuckDetector;
 
     public Vector2 Position => _activeFoot.Position;
     public Quaternion Rotation => _activeFoot.Rotation;
+    public bool IsStuck => _stuckDetector.IsStuck;
 
+    public void Init(IStuckDetector stuckDetector)
+    {
+        _stuckDetector = stuckDetector;
+    }
+    
     private void Awake()
     {
         _activeFoot = _leftFoot.IsActive ? _leftFoot : _rightFoot;

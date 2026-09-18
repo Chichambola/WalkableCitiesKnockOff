@@ -21,19 +21,6 @@ public class Foot : MonoBehaviour
         _collider = GetComponent<Collider2D>();
     }
 
-    private void OnEnable()
-    {
-        _initialPosition = transform.localPosition;
-    }
-
-    private void FixedUpdate()
-    {
-        if (!_isActive)
-        {
-            transform.localPosition = _initialPosition;
-        }
-    }
-
     public void SetActive(bool value)
     {
         _isActive = value;

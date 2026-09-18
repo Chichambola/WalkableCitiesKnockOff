@@ -8,7 +8,7 @@ using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class Player : MonoBehaviour, IPlayer, ICapturable
+public class Player : MonoBehaviour, IPlayer, ICapturable, IStuckDetector
 {
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private FeetHandler _feetHandler;
@@ -29,6 +29,7 @@ public class Player : MonoBehaviour, IPlayer, ICapturable
     public Vector2 Position => transform.position;
     public Quaternion Rotation => transform.rotation;
     public bool IsAccepting => _inputReader.IsHoldingAccept;
+    public bool IsStuck => _stuckPreventor.IsStuck;
     public string AcceptButton => _inputReader.AcceptButton;
     public string RestartButton => _inputReader.RestartButton;
     public string ChangeFootButton => _inputReader.ChangeFootButton;
@@ -45,6 +46,9 @@ public class Player : MonoBehaviour, IPlayer, ICapturable
     
     private void OnEnable()
     {
+        _feetHandler.Init(this);
+        _rotator.Init(this);
+        
         StateSaver.Register(this);
         
         SubscribeEvents();
@@ -128,6 +132,8 @@ public class Player : MonoBehaviour, IPlayer, ICapturable
 
         _rotator.ResetToLastState();
         _feetHandler.ResetToLastState();
+        
+        _rotator.SwitchDirection();
         
         return;
         

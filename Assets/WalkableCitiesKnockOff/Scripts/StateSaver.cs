@@ -87,7 +87,10 @@ public class StateSaver : Singleton<StateSaver>
             
             foreach (var kvp in kvpList)
             {
-                s_capturables[kvp.Key] = new CapturableState(kvp.Key.Position, kvp.Key.Rotation);
+                if (!kvp.Key.IsStuck)
+                {
+                    s_capturables[kvp.Key] = new CapturableState(kvp.Key.Position, kvp.Key.Rotation);
+                }
             }
 
             await UniTask.Delay(TimeSpan.FromSeconds(_currentInterval), cancellationToken: token);
