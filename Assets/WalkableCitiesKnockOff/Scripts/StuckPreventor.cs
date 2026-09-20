@@ -32,6 +32,11 @@ public class StuckPreventor : MonoBehaviour
         PreventStuckTask(_cts.Token).Forget();
     }
 
+    private void Update()
+    {
+        Debug.Log(IsStuck);
+    }
+
     private void OnDisable()
     {
         _cts?.Cancel();
@@ -64,22 +69,20 @@ public class StuckPreventor : MonoBehaviour
 
                     ColliderDistance2D dist = Physics2D.Distance(collider, hitCollider);
 
-                    if (dist.distance < _distance) 
+                    if (dist.isOverlapped) 
                     {
                         stuckCount++;
-                        
-                        Debug.Log(dist.distance);
                         
                         Vector2 separation = dist.normal * dist.distance;
                         
                         DetectedOverlap?.Invoke(separation);
                     }
                 }
-                
-                await UniTask.WaitForFixedUpdate();
             }
-
+            
             IsStuck = stuckCount != 0;
+
+            await UniTask.WaitForFixedUpdate(cancellationToken: token);
         }
     }
 }

@@ -68,7 +68,7 @@ public class Rotator : MonoBehaviour, ICapturable
     
     public void SetPoint(Vector3 point) => _rotatePoint = point;
 
-    public void ResetToLastState()
+    public void ResetToLastState(Vector2 offset)
     {
         var value = StateSaver.GetState(this);
         

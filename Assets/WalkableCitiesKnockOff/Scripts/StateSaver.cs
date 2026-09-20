@@ -92,8 +92,8 @@ public class StateSaver : Singleton<StateSaver>
                     s_capturables[kvp.Key] = new CapturableState(kvp.Key.Position, kvp.Key.Rotation);
                 }
             }
-
-            await UniTask.Delay(TimeSpan.FromSeconds(_currentInterval), cancellationToken: token);
+            
+            await UniTask.DelayFrame(10, PlayerLoopTiming.FixedUpdate, cancellationToken: token);
         }
     }
 

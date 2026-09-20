@@ -7,5 +7,5 @@ public interface ICapturable
     bool IsStuck { get; }
     
     
-    void ResetToLastState();
+    void ResetToLastState(Vector2 offset);
 }

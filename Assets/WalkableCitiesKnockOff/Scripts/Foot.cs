@@ -30,6 +30,8 @@ public class Foot : MonoBehaviour, ICapturable
 
     private void OnEnable()
     {
+        _initialPosition = transform.position;
+        
         StateSaver.Register(this);
     }
 
@@ -42,11 +44,11 @@ public class Foot : MonoBehaviour, ICapturable
         transform.parent = null;
     }
     
-    public void ResetToLastState()
+    public void ResetToLastState(Vector2 offset)
     {
         var value = StateSaver.GetState(this);
 
-        transform.position = value.Position;
+        transform.position = value.Position + offset;
         transform.rotation = value.Rotation;
     }
     

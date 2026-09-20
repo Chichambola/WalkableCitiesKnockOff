@@ -106,6 +106,7 @@ public class Player : MonoBehaviour, IPlayer, ICapturable, IStuckDetector
     
     private void OnChangeKeyPressed()
     {
+        _feetHandler.Switch();
         Vector3 value = _feetHandler.GetPosition();
         _rotator.SetPoint(value);
         _rotator.SwitchPosition();
@@ -128,14 +129,15 @@ public class Player : MonoBehaviour, IPlayer, ICapturable, IStuckDetector
     
     private void OnDetectedOverlap(Vector2 separation)
     {
-        ResetToLastState();
+        ResetToLastState(separation);
 
-        _rotator.ResetToLastState();
-        _feetHandler.ResetToLastState();
-        
-        _feetHandler.
-        
-        _rotator.SwitchDirection();
+        _rotator.ResetToLastState(separation);
+        _feetHandler.ResetToLastState(separation);
+
+        _feetHandler.Switch();
+        var pos = _feetHandler.GetPosition();
+        _rotator.SetPoint(pos);
+        _rotator.SwitchPosition();
         
         return;
         
@@ -153,13 +155,15 @@ public class Player : MonoBehaviour, IPlayer, ICapturable, IStuckDetector
         currentPos = new Vector3(_rotator.Position.x, _rotator.Position.y, 0);
         currentPos += correctSeparation;
         _rotator.SetPoint(currentPos);
+        
+        return;
     }
 
-    public void ResetToLastState()
+    public void ResetToLastState(Vector2 offset)
     {
         var value = StateSaver.GetState(this);
         
-        transform.position = value.Position;
+        transform.position = value.Position + offset;
         transform.rotation = value.Rotation;
     }
 }

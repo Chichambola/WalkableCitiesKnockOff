@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEditorInternal;
@@ -58,46 +59,11 @@ public class FeetHandler : MonoBehaviour, IStuckDetector
         if (_activeFoot != null)
             Destroy(_activeFoot.gameObject);
     }
-
-    public void Switch()
-    {
-        
-    }
-
-    private void Set()
-    {
-        
-    }
     
     public Vector3 GetPosition()
     {
-        Vector3 position;
-        
-        if (_leftFoot.IsActive)
-        {
-            _leftFoot.SetActive(false); 
-            _leftFoot.ResetCharacteristics(transform);
+        Vector3 position = _activeFoot.Position;
 
-            _rightFoot.SetActive(true);
-            
-            _activeFoot = _rightFoot;
-            _inactiveFoot = _leftFoot;
-            
-            position = _rightFoot.Position;
-        }
-        else
-        {
-            _rightFoot.SetActive(false);
-            _rightFoot.ResetCharacteristics(transform);
-            
-            _leftFoot.SetActive(true);
-            
-            _activeFoot = _leftFoot;
-            _inactiveFoot = _rightFoot;
-            
-            position = _leftFoot.Position;
-        }
-        
         return position;
     }
 
@@ -106,9 +72,23 @@ public class FeetHandler : MonoBehaviour, IStuckDetector
         _activeFoot.transform.position = pos;
     }
 
-    public void ResetToLastState()
+    public void ResetToLastState(Vector2 offset)
     {
-        _activeFoot.ResetToLastState();
-        _inactiveFoot.ResetToLastState();
+        _activeFoot.ResetToLastState(offset);
+        _inactiveFoot.ResetToLastState(offset);
+    }
+    
+    public void Switch()
+    {
+        _activeFoot.SetActive(false);
+        _activeFoot.ResetCharacteristics(transform);
+        
+        _inactiveFoot.SetActive(true);
+
+        var tempActive  = _activeFoot;
+        var tempInactive = _inactiveFoot;
+        
+        _activeFoot = tempInactive;
+        _inactiveFoot = tempActive;
     }
 }
