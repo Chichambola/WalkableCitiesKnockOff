@@ -121,13 +121,9 @@ public class EndOfLevelHandler : Singleton<EndOfLevelHandler>
             _cts?.Cancel();
             
             _sliderHandler.StopMoving();
+        }
 
-            transform.position = _outOfCameraPosition;
-        }
-        else
-        {
-            transform.position = _initialPosition;
-        }
+        _canvas.enabled = value;
     }
 }
 

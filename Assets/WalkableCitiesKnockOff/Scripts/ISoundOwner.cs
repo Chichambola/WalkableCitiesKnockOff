@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ISoundOwner
 {
-    AudioClip GetSound();
+    public ESoundType Type { get; }
 }

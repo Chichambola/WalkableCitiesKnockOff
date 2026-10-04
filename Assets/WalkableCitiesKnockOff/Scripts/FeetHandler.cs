@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
-public class FeetHandler : MonoBehaviour, IStuckDetector
+public class FeetHandler : MonoBehaviour
 {
     [SerializeField] private Foot _leftFoot;
     [SerializeField] private Foot _rightFoot;
@@ -18,15 +18,6 @@ public class FeetHandler : MonoBehaviour, IStuckDetector
     private Foot _inactiveFoot;
     private Vector3 _lastPosition;
     private Quaternion _lastRotation;
-    private IStuckDetector _stuckDetector;
-
-    public Vector2 Position => _activeFoot.Position;
-    public bool IsStuck => _stuckDetector.IsStuck;
-
-    public void Init(IStuckDetector stuckDetector)
-    {
-        _stuckDetector = stuckDetector;
-    }
     
     private void Awake()
     {
@@ -40,9 +31,6 @@ public class FeetHandler : MonoBehaviour, IStuckDetector
             _activeFoot = _rightFoot;
             _inactiveFoot = _leftFoot;
         }
-        
-        _activeFoot.Init(this);
-        _inactiveFoot.Init(this);
     }
 
     private void OnValidate()
@@ -60,28 +48,13 @@ public class FeetHandler : MonoBehaviour, IStuckDetector
             Destroy(_activeFoot.gameObject);
     }
     
-    public Vector3 GetPosition()
-    {
-        Vector3 position = _activeFoot.Position;
-
-        return position;
-    }
-
-    public void Set(Vector3 pos)
-    {
-        _activeFoot.transform.position = pos;
-    }
-
-    public void ResetToLastState(Vector2 offset)
-    {
-        _activeFoot.ResetToLastState(offset);
-        _inactiveFoot.ResetToLastState(offset);
-    }
+    public Vector2 GetPosition() => _activeFoot.Position;
+    public float GetRotation() => _activeFoot.Rotation;
     
     public void Switch()
     {
         _activeFoot.SetActive(false);
-        _activeFoot.ResetCharacteristics(transform);
+        _activeFoot.ResetCharacteristics();
         
         _inactiveFoot.SetActive(true);
 
@@ -90,5 +63,11 @@ public class FeetHandler : MonoBehaviour, IStuckDetector
         
         _activeFoot = tempInactive;
         _inactiveFoot = tempActive;
+    }
+
+    public void ResetFeet()
+    {
+        _activeFoot.ResetCharacteristics();
+        _inactiveFoot.ResetCharacteristics();
     }
 }

@@ -2,27 +2,28 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Newtonsoft.Json.Bson;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneHandler : MonoBehaviour
 {
     [SerializeField] private Transform _spawnPoint;
+    [SerializeField] private SceneReadyChannel _channel;
     [SerializeField] private EndOfLevel _endOfLevel;
-
-    public event Action<IPlayer> Loaded;
     
     private IPlayer _player;
 
-    private void Awake()
+    private void OnEnable()
     {
-        Game.Loaded += InitializePlayer;
+        _channel.Raised += InitializePlayer;
     }
 
     private void OnDisable()
     {
-        Game.Loaded -= InitializePlayer;
+        _channel.Raised -= InitializePlayer;
     }
 
     private void Start()
@@ -37,7 +38,5 @@ public class SceneHandler : MonoBehaviour
         _player.Set(_spawnPoint.position);
 
         _player.Set(_spawnPoint.rotation);
-        
-        Loaded?.Invoke(_player);
     }
 }

@@ -22,7 +22,7 @@ public class Singleton<T> : MonoBehaviour where T : class
     
     private void OnDestroy()
     {
-        if (s_instance == this) 
+        if (s_instance == this && s_instance!= null) 
             s_instance = null;
     }
 }

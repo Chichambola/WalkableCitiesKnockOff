@@ -17,6 +17,7 @@ public class SceneLoader : Singleton<SceneLoader>
     [SerializeField] private SceneGroup[] _sceneGroups;
 
     public static event Action Loaded;
+    public static event Action RestartedScene;
     
     private float _targetProgress;
     private int _currentSceneIndex;
@@ -134,8 +135,10 @@ public class SceneLoader : Singleton<SceneLoader>
         Debug.Log($"Loaded: {obj}");
     }
     
-    private void RestartActiveScene()
+    private async void RestartActiveScene()
     {
-        _groupHandler.RestartActiveScene().Forget();
+       await _groupHandler.RestartActiveScene();
+
+       RestartedScene?.Invoke();
     }
 }

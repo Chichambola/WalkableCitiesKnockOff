@@ -1,32 +1,50 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SoundVerifier : MonoBehaviour
 {
     [SerializeField] private Vector2 _searchSize;
     [SerializeField] private ContactFilter2D _filter;
+    [SerializeField] private int _collidersAmount = 50;
     
-    private List<RaycastHit2D> _colliders;
+    private Collider2D[] _colliders;
+    private Vector2 _point;
+    private Vector2 _position;
 
     private void Awake()
     {
-        _colliders = new List<RaycastHit2D>();
+        _colliders = new Collider2D[_collidersAmount];
     }
 
-    public ISoundOwner DetermineSound(Vector2 position)
+    public ESoundType DetermineSound(Vector2 position, float angle)
     {
-        int hits = Physics2D.BoxCast(position, _searchSize, 0f, Vector2.up,_filter, _colliders);
+        _position = position;
+        
+        int hits = Physics2D.OverlapPoint(position, _filter, _colliders);
 
+        Floor soundOwner = null;
+        
         for (int i = 0; i < hits; i++)
         {
-            if (_colliders[i].collider.TryGetComponent(out ISoundOwner soundOwner))
+            var hit = _colliders[i];
+
+            if (!hit.TryGetComponent(out Floor foundOwner))
+                continue;
+            
+            if (soundOwner == null)
             {
-                return soundOwner;
+                soundOwner = foundOwner;
+            }
+            else if (soundOwner.SortingLayerIndex < foundOwner.SortingLayerIndex)
+            {
+                soundOwner = foundOwner;
             }
         }
-
-        return null;
+        
+        return soundOwner?.Type ?? throw new Exception("There are no sound owners!");
     }
 }

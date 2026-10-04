@@ -8,18 +8,23 @@ using UnityEngine;
 
 public class ScoreHandler : Singleton<ScoreHandler>
 {
+    [SerializeField] private SceneReadyChannel _channel;
     [SerializeField] private TextMeshProUGUI _text;
     
     private IPlayer _player;
     
     private static int s_currentStepCount;
     private static int s_wholeAmount;
+    private static TextMeshProUGUI s_text;
     
     private void OnEnable()
     {
         Game.RequestedRestart += Restore;
         Game.RequestedNextLevel += OnRequestedNextLevel;
-        Game.Loaded += OnLoaded;
+        _channel.Raised += OnLoaded;
+        
+        _text.enabled = true;
+        s_text = _text;
         
         UpdateText();
     }
@@ -28,10 +33,15 @@ public class ScoreHandler : Singleton<ScoreHandler>
     {
         Game.RequestedRestart -= Restore;
         Game.RequestedNextLevel -= OnRequestedNextLevel;
-        Game.Loaded -= OnLoaded;
+        _channel.Raised -= OnLoaded;
 
         s_currentStepCount = 0;
         s_wholeAmount = 0;
+    }
+    
+    public static void Hide()
+    {
+        s_text.enabled = false;
     }
     
     private void OnLoaded(IPlayer player)
@@ -56,6 +66,9 @@ public class ScoreHandler : Singleton<ScoreHandler>
         s_wholeAmount -= s_currentStepCount;
         
         s_currentStepCount = 0;
+
+        if (!s_text.isActiveAndEnabled)
+            s_text.enabled = true;
         
         UpdateText();
     }

@@ -5,6 +5,14 @@ using UnityEngine;
 
 public class Wall : BasicObject, ISoundOwner
 {
-    [SerializeField] private SoundHandler _soundHandler;
-    public AudioClip GetSound() => _soundHandler.GetSound();
+    [SerializeField] private ESoundType _type = ESoundType.Wall;
+
+    public ESoundType Type => _type;
+
+    protected override void OnValidate()
+    {
+        RigidbodyType = RigidbodyType2D.Kinematic;
+        
+        base.OnValidate();
+    }
 }

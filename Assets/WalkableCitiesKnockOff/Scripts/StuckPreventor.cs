@@ -16,9 +16,9 @@ public class StuckPreventor : MonoBehaviour
     
     private Collider2D[] _colliders;
     private CancellationTokenSource _cts;
-
-    public bool IsStuck { get; private set; }
-
+    private Collider2D _hitCollider;
+    private Vector2 _offset;
+    private Vector3 _currentColliderPos;
     
     private void Awake()
     {
@@ -30,11 +30,6 @@ public class StuckPreventor : MonoBehaviour
         _cts = new CancellationTokenSource();
         
         PreventStuckTask(_cts.Token).Forget();
-    }
-
-    private void Update()
-    {
-        Debug.Log(IsStuck);
     }
 
     private void OnDisable()
@@ -55,21 +50,24 @@ public class StuckPreventor : MonoBehaviour
             
             foreach (var collider in _collidersTocheck)
             {
-                var position = collider.transform.position;
+                _currentColliderPos = collider.transform.position;
 
                 var size = collider.size;
 
                 var angle = collider.transform.rotation.eulerAngles.z;
             
-                var hits =  Physics2D.OverlapBox(position, size, angle, _filter, _colliders);
-           
+                var hits =  Physics2D.OverlapBox(_currentColliderPos, size, angle, _filter, _colliders);
+
+                if (hits == 0)
+                    continue;
+                
                 for (int i = 0; i < hits; i++)
                 {
-                    var hitCollider = _colliders[i];
+                    _hitCollider = _colliders[i];
 
-                    ColliderDistance2D dist = Physics2D.Distance(collider, hitCollider);
+                    ColliderDistance2D dist = Physics2D.Distance(collider, _hitCollider);
 
-                    if (dist.isOverlapped) 
+                    if (dist.isOverlapped)
                     {
                         stuckCount++;
                         
@@ -77,11 +75,11 @@ public class StuckPreventor : MonoBehaviour
                         
                         DetectedOverlap?.Invoke(separation);
                     }
+                    
+                    await UniTask.DelayFrame(5, PlayerLoopTiming.FixedUpdate, cancellationToken: token);
                 }
             }
             
-            IsStuck = stuckCount != 0;
-
             await UniTask.WaitForFixedUpdate(cancellationToken: token);
         }
     }

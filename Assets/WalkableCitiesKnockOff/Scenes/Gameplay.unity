@@ -151,6 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerPrefab: {fileID: 5455156872935473218, guid: 4e6a7ca762f5c654d86ee22e68a2b2f4, type: 3}
   _audioHandler: {fileID: 1815962807}
+  _channel: {fileID: 11400000, guid: bf9ac8cdc4df59841b70fe218b0655ef, type: 2}
 --- !u!4 &392798113
 Transform:
   m_ObjectHideFlags: 0
@@ -288,6 +289,47 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _volume: 100
+  _channel: {fileID: 11400000, guid: bf9ac8cdc4df59841b70fe218b0655ef, type: 2}
+  _soundRequest: {fileID: 11400000, guid: c7c870135597a1b4b9f61c2e1cabe339, type: 2}
+  _soundClips:
+    _serializedList:
+    - Key: 0
+      Value:
+      - {fileID: 8300000, guid: 4f1a674df31c841498788ac0c8834905, type: 3}
+      - {fileID: 8300000, guid: 3a311c21d00acd846ac89dfba5ba61a6, type: 3}
+      - {fileID: 8300000, guid: f6769cee175861b4b8501e54edbbc614, type: 3}
+      - {fileID: 8300000, guid: e91af130c2532ce42b037e7c71f7324d, type: 3}
+      - {fileID: 8300000, guid: da3c5fe207077be4099c8f42c18eeb41, type: 3}
+    - Key: 1
+      Value:
+      - {fileID: 8300000, guid: 67c4e477bec39ef4987f168d333fdf69, type: 3}
+      - {fileID: 8300000, guid: 8e11653c113f65f4db88e61c305bb738, type: 3}
+      - {fileID: 8300000, guid: 1d227e608b77f864c90f4d578050cfa6, type: 3}
+    - Key: 2
+      Value:
+      - {fileID: 8300000, guid: 4ea3e4ceb00acad47ac88a68c72a3efd, type: 3}
+      - {fileID: 8300000, guid: 53b9ffc8fb255944dbb562a9874c9111, type: 3}
+      - {fileID: 8300000, guid: 1e5002e298153b243b3992177e590628, type: 3}
+    - Key: 6
+      Value:
+      - {fileID: 8300000, guid: 9e4d12dad099a23479dc7e5309ecf2b0, type: 3}
+      - {fileID: 8300000, guid: d66f8485295e7ea40b8da6780704d6b7, type: 3}
+      - {fileID: 8300000, guid: 44e7eddf76b98c843b2a578a02e667e9, type: 3}
+    - Key: 3
+      Value:
+      - {fileID: 8300000, guid: fefa09827420fbe59b6cfc356fe3a5f8, type: 3}
+      - {fileID: 8300000, guid: 52718122b1483148ea266c9ae245537f, type: 3}
+      - {fileID: 8300000, guid: 2d4d6751b39bd5d0caf7217940ddbdac, type: 3}
+    - Key: 4
+      Value:
+      - {fileID: 8300000, guid: e90a7e1970a50034485e63ecc9b7e52e, type: 3}
+      - {fileID: 8300000, guid: cb9ee71b43452b741a9133aea569a3ff, type: 3}
+      - {fileID: 8300000, guid: 1981308dd54396e4ca9af6c934df115b, type: 3}
+      - {fileID: 8300000, guid: f29cf4772fee8f943a9f597229ed07ab, type: 3}
+      - {fileID: 8300000, guid: 1d0ced6661be01b4ba0cfc2c1e794e43, type: 3}
+    - Key: 5
+      Value:
+      - {fileID: 8300000, guid: 0a2db8a83aa575f41b424fb524823368, type: 3}
 --- !u!4 &1815962808
 Transform:
   m_ObjectHideFlags: 0

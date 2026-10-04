@@ -17,16 +17,18 @@ public class Game : Singleton<Game>
 {
     [SerializeField] private Player _playerPrefab;
     [SerializeField] private AudioHandler _audioHandler;
+    [SerializeField] private SceneReadyChannel _channel;
 
     public static event Action RequestedRestart;
-    public static event Action<IPlayer> Loaded;
     public static event Func<UniTask> RequestedNextLevel;
     
     private static float s_normalTime = 1f;
     private static float s_slowTime = 0.000001f;
-    private static Player s_player;
+    private Player _player;
     private int _tweenCapacity = 3000;
-    private Vector3 _startPosition = new Vector3(999, 999, 999);
+    private Vector2 _startPosition = new (9999, 9999);
+
+    public static bool IsPaused => Mathf.Approximately(Time.timeScale, s_slowTime);
 
     private void Start()
     {
@@ -37,92 +39,67 @@ public class Game : Singleton<Game>
     {
         Time.timeScale = s_normalTime;
         
-        PerformLevelStart();
+        CreatePlayer();
         
         EndOfLevelHandler.RequestedEndOfLevel += LoadNextLevel;
         SceneLoader.Loaded += OnAllScenesLoaded;
+        SceneLoader.RestartedScene += OnLevelRestarted;
     }
 
     private void OnDisable()
     {
-        s_player.RequestedRestart -= Restart;
+        _player.RequestedRestart -= Restart;
         EndOfLevelHandler.RequestedEndOfLevel -= LoadNextLevel;
         SceneLoader.Loaded -= OnAllScenesLoaded;
+        SceneLoader.RestartedScene -= OnLevelRestarted;
     }
     
     public static void Pause()
     {
         Time.timeScale = s_slowTime;
-        
-        s_player.Freeze();
     }
 
     public static void Resume()
     {
         Time.timeScale = s_normalTime;
-
-        if (s_player != null)
-            s_player.UnFreeze();
     }
     
     private void LoadNextLevel()
     {
         RequestedNextLevel?.Invoke();
         
-        PerformLevelStart();
+        Resume();
         
-        s_player.Freeze();
-        
-        Loaded?.Invoke(s_player);
+        _channel.Raise(_player);
     }
 
-    private void Restart()
+    private void Restart() => RequestedRestart?.Invoke();
+    
+    private void OnLevelRestarted()
     {
-        RequestedRestart?.Invoke();
+        _player.transform.position = _startPosition;
+
+        _player.ResetCharacteristics();
         
-        PerformLevelStart();
+        Resume();
         
-        s_player.UnFreeze();
-        
-        Loaded?.Invoke(s_player);
+        _channel.Raise(_player);
     }
     
     private void CreatePlayer()
     {
-        if (s_player != null)
-        {
-            s_player.RequestedRestart -= Restart;
+        if (_player != null)
+            return;
         
-            Destroy(s_player.gameObject);
-        }
-        
-        s_player = Instantiate(_playerPrefab, _startPosition, quaternion.identity);
-        
-        s_player.Freeze();
+        _player = Instantiate(_playerPrefab, _startPosition, quaternion.identity);
 
-        s_player.transform.parent = transform;
+        _player.transform.parent = transform;
 
-        s_player.RequestedRestart += Restart;
-    }
-    
-    private void InitializeServices()
-    {
-        _audioHandler.Init(s_player);
-    }
-    
-    private void PerformLevelStart()
-    {
-        Resume();
-        
-        CreatePlayer();
-        
-        InitializeServices();
+        _player.RequestedRestart += Restart;
     }
     
     private void OnAllScenesLoaded()
     {
-        s_player.UnFreeze();
-        
-        Loaded?.Invoke(s_player);
+        _channel.Raise(_player);
     }
 }

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public interface IKickable
 {
-    void ChangeDirection(Vector2 directionForce);
+    UniTaskVoid ChangeDirection(Vector2 directionForce);
 }

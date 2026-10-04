@@ -4,57 +4,40 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
-public class Foot : MonoBehaviour, ICapturable
+public class Foot : MonoBehaviour
 {
     [SerializeField] private bool _isActive;
     
     private Collider2D _collider;
-    private Vector3 _initialPosition;
     private Quaternion _defaultRotation = new (0f, 0f, 0f,0f);
-    private IStuckDetector _stuckDetector;
+    private Quaternion _currentRotation;
+    private Vector3 _currentPosition;
 
     public Vector2 Position => transform.position;
-    public Quaternion Rotation => transform.rotation;
     public bool IsActive => _isActive;
-    public bool IsStuck => _stuckDetector.IsStuck;
+    public float Rotation => transform.rotation.eulerAngles.z;
 
-    public void Init(IStuckDetector stuckDetector)
-    {
-        _stuckDetector = stuckDetector;
-    }
-    
     private void Awake()
     {
         _collider = GetComponent<Collider2D>();
     }
-
-    private void OnEnable()
+    
+    private void FixedUpdate()
     {
-        _initialPosition = transform.position;
-        
-        StateSaver.Register(this);
+         transform.rotation = _currentRotation;
     }
 
     public void SetActive(bool value)
     {
+        _currentRotation = value ? transform.rotation : _defaultRotation;
+        
         _isActive = value;
 
-       // _collider.enabled = !value;
-        
-        transform.parent = null;
+        //_collider.enabled = !value;
     }
     
-    public void ResetToLastState(Vector2 offset)
+    public void ResetCharacteristics()
     {
-        var value = StateSaver.GetState(this);
-
-        transform.position = value.Position + offset;
-        transform.rotation = value.Rotation;
-    }
-    
-    public void ResetCharacteristics(Transform parent)
-    {
-        transform.parent = parent;
-        transform.rotation = _defaultRotation;
+        _currentRotation = _defaultRotation;
     }
 }

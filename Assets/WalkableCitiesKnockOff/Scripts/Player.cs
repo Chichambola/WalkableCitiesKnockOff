@@ -8,7 +8,7 @@ using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class Player : MonoBehaviour, IPlayer, ICapturable, IStuckDetector
+public class Player : MonoBehaviour, IPlayer
 {
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private FeetHandler _feetHandler;
@@ -17,19 +17,18 @@ public class Player : MonoBehaviour, IPlayer, ICapturable, IStuckDetector
     [SerializeField] private CollisionHandler _collisionHandler;
     [SerializeField] private SoundVerifier _soundVerifier;
     [SerializeField] private Transform _body;
-    [SerializeField] private StuckPreventor _stuckPreventor;
     
     public event Action RequestedRestart;
-    public event Action<ISoundOwner> HitSoundOwner;
     public event Action Stepped;
+    public event Action<ESoundType, Vector2> HitSoundOwner;
     
     private Rigidbody2D _rigidbody;
-    private bool _isFrozen;
+    private Vector2 _currentFootPosition;
+    private float _currentFootRotation;
 
     public Vector2 Position => transform.position;
     public Quaternion Rotation => transform.rotation;
     public bool IsAccepting => _inputReader.IsHoldingAccept;
-    public bool IsStuck => _stuckPreventor.IsStuck;
     public string AcceptButton => _inputReader.AcceptButton;
     public string RestartButton => _inputReader.RestartButton;
     public string ChangeFootButton => _inputReader.ChangeFootButton;
@@ -46,124 +45,88 @@ public class Player : MonoBehaviour, IPlayer, ICapturable, IStuckDetector
     
     private void OnEnable()
     {
-        _feetHandler.Init(this);
-        _rotator.Init(this);
-        
-        StateSaver.Register(this);
-        
         SubscribeEvents();
+    }
 
-        _inputReader.ResetPressed += OnResetPressed;
-        _stuckPreventor.DetectedOverlap += OnDetectedOverlap;
-        
-        _isFrozen = false;
+    private void Start()
+    {
+        _rotator.SetPoint(_feetHandler.GetPosition());
     }
 
     private void OnDisable()
     {
-        if (!_isFrozen)
-        {
-            UnsubscribeEvents();
-        }
-        
-        _inputReader.ResetPressed -= OnResetPressed;
-        _stuckPreventor.DetectedOverlap -= OnDetectedOverlap;
+        UnsubscribeEvents();
     }
 
     private void SubscribeEvents()
     {
         _inputReader.ChangeKeyPressed += OnChangeKeyPressed;
+        _inputReader.ResetPressed += OnResetPressed;
         _collisionHandler.HitKickable += OnHitKickable;
         _collisionHandler.HitWall += OnHitWall;
-        _collisionHandler.HitSoundOwner += OnHitSoundOwner;
+        _collisionHandler.HitSoundOwner += OnHit;
     }
     
     private void UnsubscribeEvents()
     {
         _inputReader.ChangeKeyPressed -= OnChangeKeyPressed;
+        _inputReader.ResetPressed -= OnResetPressed;
         _collisionHandler.HitKickable -= OnHitKickable;
         _collisionHandler.HitWall -= OnHitWall;
-        _collisionHandler.HitSoundOwner -= OnHitSoundOwner;
+        _collisionHandler.HitSoundOwner -= OnHit;
     }
 
     public void Set(Vector3 spawnPointPosition) => transform.position = spawnPointPosition;
 
     public void Set(Quaternion rotation) => transform.rotation = rotation;
-
-    public void Freeze()
+    
+    public void ResetCharacteristics()
     {
-        _isFrozen = true;
-        
-        UnsubscribeEvents();
-    }
+        _rotator.ResetCharacteristics(Vector2.zero);
 
-    public void UnFreeze()
-    {
-        _isFrozen = false;
-        
-        SubscribeEvents();
+        _feetHandler.ResetFeet();
     }
     
     private void OnChangeKeyPressed()
     {
-        _feetHandler.Switch();
-        Vector3 value = _feetHandler.GetPosition();
-        _rotator.SetPoint(value);
-        _rotator.SwitchPosition();
+        if (Game.IsPaused)
+            return;
+        
+        ChangePosition();
         
         Stepped?.Invoke();
         
-        var soundOwner = _soundVerifier.DetermineSound(value);
-
-        if (soundOwner != null)
-            HitSoundOwner?.Invoke(soundOwner);
+        var soundOwner = _soundVerifier.DetermineSound(_currentFootPosition, _currentFootRotation);
+        
+        HitSoundOwner?.Invoke(soundOwner, Position);
     }
 
     private void OnResetPressed() => RequestedRestart?.Invoke();
     
-    private void OnHitKickable(IKickable kickable, Vector2 direction) => _kicker.Execute(direction, kickable);
-    
-    private void OnHitWall() => _rotator.SwitchDirection();
-    
-    private void OnHitSoundOwner(ISoundOwner soundOwner) => HitSoundOwner?.Invoke(soundOwner);
-    
-    private void OnDetectedOverlap(Vector2 separation)
+    private void OnHitKickable(IKickable kickable, Vector2 direction)
     {
-        ResetToLastState(separation);
-
-        _rotator.ResetToLastState(separation);
-        _feetHandler.ResetToLastState(separation);
-
-        _feetHandler.Switch();
-        var pos = _feetHandler.GetPosition();
-        _rotator.SetPoint(pos);
-        _rotator.SwitchPosition();
-        
-        return;
-        
-        Debug.Log("Stuck");
-        
-        Vector3 correctSeparation = new Vector3(separation.x, separation.y, 0);
-        
-        Vector3 currentPos = new Vector3(_feetHandler.Position.x, _feetHandler.Position.y, 0);
-        
-        transform.position += correctSeparation;
-        
-        currentPos += correctSeparation;
-        _feetHandler.Set(currentPos);
-
-        currentPos = new Vector3(_rotator.Position.x, _rotator.Position.y, 0);
-        currentPos += correctSeparation;
-        _rotator.SetPoint(currentPos);
-        
-        return;
+        _kicker.Execute(kickable, direction);
     }
 
-    public void ResetToLastState(Vector2 offset)
+    private void OnHitWall() => _rotator.SwitchDirection();
+    
+    private void OnHit(ISoundOwner soundOwner) => HitSoundOwner?.Invoke(soundOwner.Type, Position);
+    
+    private void OnStuck(Vector2 separation)
     {
-        var value = StateSaver.GetState(this);
+        Vector3 offset = new Vector3(separation.x, separation.y, 0);
         
-        transform.position = value.Position + offset;
-        transform.rotation = value.Rotation;
+        transform.position += offset;
+        
+        ChangePosition();
+    }
+    
+    private void ChangePosition()
+    {
+        _feetHandler.Switch();
+        _currentFootPosition = _feetHandler.GetPosition();
+        _currentFootRotation = _feetHandler.GetRotation();
+        _rotator.SetPoint(_currentFootPosition);
+        _rotator.SwitchPosition();
     }
 }

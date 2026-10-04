@@ -1,16 +1,36 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Ball : BasicObject, IKickable, ISoundOwner
 {
-    [SerializeField] private SoundHandler _soundHandler;
-    
-    public AudioClip GetSound() => _soundHandler.GetSound(); 
+    [SerializeField] private ESoundType _type = ESoundType.Ball;
+    [SerializeField] private SoundRequestChannel _soundRequestChannel;
 
-    public void ChangeDirection(Vector2 directionForce)
+    private bool _canBeKicked;
+    
+    public ESoundType Type => _type;
+    private void OnEnable()
     {
-        Rigidbody.AddForce(directionForce, ForceMode2D.Impulse);
+        _canBeKicked = true;
+    }
+
+    public async UniTaskVoid ChangeDirection(Vector2 directionForce)
+    {
+        if (!_canBeKicked)
+            return;
+        
+        Rigidbody.AddRelativeForce(directionForce, ForceMode2D.Impulse);
+        
+        _soundRequestChannel.Raise(_type, transform.position);
+
+        _canBeKicked = false;
+        
+        await UniTask.Delay(TimeSpan.FromSeconds(.5f));
+
+        _canBeKicked = true;
     }
 }

@@ -76,12 +76,7 @@ public class SliderHandler : MonoBehaviour
             }
             else
             {
-                value -= _increaseValue;
-
-                if (value <= 0)
-                {
-                    value = 0;
-                }
+                value = 0;
             }
             
             _slidersSettings.startValue = _slider.value;

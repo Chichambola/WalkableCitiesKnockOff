@@ -5,7 +5,7 @@ using UnityEngine;
 
 public interface IPlayer
 {
-    public event Action<ISoundOwner> HitSoundOwner;
+    public event Action<ESoundType, Vector2> HitSoundOwner;
     public event Action RequestedRestart;
     public event Action Stepped;
     
