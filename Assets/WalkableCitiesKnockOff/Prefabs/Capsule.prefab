@@ -167,6 +167,7 @@ MonoBehaviour:
   RigidbodyType: 0
   _isTrigger: 0
   _type: 6
+  _soundRequestChannel: {fileID: 0}
 --- !u!114 &5183011506062553669
 MonoBehaviour:
   m_ObjectHideFlags: 0

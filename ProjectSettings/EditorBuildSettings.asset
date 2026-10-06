@@ -12,28 +12,31 @@ EditorBuildSettings:
     path: Assets/WalkableCitiesKnockOff/Scenes/Gameplay.unity
     guid: c9c69c1859e1b2849a3dcf564ade5dba
   - enabled: 1
-    path: Assets/WalkableCitiesKnockOff/Scenes/FirstLevel.unity
+    path: Assets/WalkableCitiesKnockOff/Scenes/1.unity
     guid: d870fcb3b83119b43a0c8acc6f44f84c
   - enabled: 1
-    path: Assets/WalkableCitiesKnockOff/Scenes/ThirdLevel.unity
+    path: Assets/WalkableCitiesKnockOff/Scenes/3.unity
     guid: b4d349319e8357f42a4e43093dcc7ab2
   - enabled: 1
     path: Assets/WalkableCitiesKnockOff/Scenes/UI.unity
     guid: 2aeccd9037f81b64894bfd5ad3f8fece
   - enabled: 1
-    path: Assets/WalkableCitiesKnockOff/Scenes/FifthLevel.unity
+    path: Assets/WalkableCitiesKnockOff/Scenes/5.unity
     guid: 48bf8c2ced802484b8601b38943341b5
   - enabled: 1
-    path: Assets/WalkableCitiesKnockOff/Scenes/Seventhlevel.unity
+    path: Assets/WalkableCitiesKnockOff/Scenes/7.unity
     guid: 48935c195ec870748a66effe9ecb3d55
   - enabled: 1
-    path: Assets/WalkableCitiesKnockOff/Scenes/SecondLevel.unity
+    path: Assets/WalkableCitiesKnockOff/Scenes/2.unity
     guid: fff8b8812c8bd494a885dea054a3fe11
   - enabled: 1
-    path: Assets/WalkableCitiesKnockOff/Scenes/SixthLevel.unity
+    path: Assets/WalkableCitiesKnockOff/Scenes/8.unity
+    guid: fcff9b5012a279ac98a731cb37ba13ab
+  - enabled: 1
+    path: Assets/WalkableCitiesKnockOff/Scenes/6.unity
     guid: c19fd29f1225a5b488777addb7e1dbaa
   - enabled: 1
-    path: Assets/WalkableCitiesKnockOff/Scenes/ForthLevel.unity
+    path: Assets/WalkableCitiesKnockOff/Scenes/4.unity
     guid: 1aa179b4c41f130448e132e87fc7063b
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 7736a41b23a92bdd9a2340d96d65da30, type: 2}
