@@ -42,12 +42,7 @@ public class Dog : BasicObject
     {
         _cts?.Dispose();
     }
-
-    private void FixedUpdate()
-    {
-        
-    }
-
+    
     private async UniTaskVoid LookForTask(CancellationToken token)
     {
         while (!token.IsCancellationRequested)
