@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
+using UnityEditor.Searcher;
 using UnityEngine;
 
-public class Searcher<T> : MonoBehaviour where T : MonoBehaviour
+public class Searcher<T> : MonoBehaviour where T : ISearchable
 {
     [SerializeField] private float _radius = 10f;
     [SerializeField] private ContactFilter2D _filter;
@@ -30,6 +32,8 @@ public class Searcher<T> : MonoBehaviour where T : MonoBehaviour
             }
         }
 
+        Debug.Log(detectedHits.Count);
+        
         return detectedHits.Count != 0;
     }
 
@@ -38,7 +42,7 @@ public class Searcher<T> : MonoBehaviour where T : MonoBehaviour
         if (objects.Count == 0)
             throw new Exception("List count is 0");
         
-        T closest = null;
+        T closest = default(T);
 
         float minDistance = Mathf.Infinity;
         
@@ -46,7 +50,7 @@ public class Searcher<T> : MonoBehaviour where T : MonoBehaviour
 
         foreach (var T in objects)
         {
-            float distance = Vector2.Distance(T.transform.position, currentPos);
+            float distance = Vector2.Distance(T.Position, currentPos);
 
             if (distance < minDistance)
             {
@@ -56,5 +60,20 @@ public class Searcher<T> : MonoBehaviour where T : MonoBehaviour
         }
 
         return closest;
+    }
+    
+    public bool IsBlocked(T @object)
+    {
+        var hits = Physics2D.Linecast(transform.position, @object.Position, _filter, _hits);
+
+        for (int i = 0; i < hits; i++)
+        {
+            if (_hits[i].collider.TryGetComponent(out IBlockable _))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

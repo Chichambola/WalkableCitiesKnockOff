@@ -24,8 +24,8 @@ public class Game : Singleton<Game>
     
     private static float s_normalTime = 1f;
     private static float s_slowTime = 0.000001f;
-    private Player _player;
     private int _tweenCapacity = 3000;
+    private Player _player;
     private Vector2 _startPosition = new (9999, 9999);
 
     public static bool IsPaused => Mathf.Approximately(Time.timeScale, s_slowTime);
@@ -42,16 +42,15 @@ public class Game : Singleton<Game>
         CreatePlayer();
         
         EndOfLevelHandler.RequestedEndOfLevel += LoadNextLevel;
+        EndOfLevelHandler.DetectedPlayer += OnPlayerDetected;
         SceneLoader.Loaded += OnAllScenesLoaded;
-        SceneLoader.RestartedScene += OnLevelRestarted;
     }
-
+    
     private void OnDisable()
     {
         _player.RequestedRestart -= Restart;
         EndOfLevelHandler.RequestedEndOfLevel -= LoadNextLevel;
         SceneLoader.Loaded -= OnAllScenesLoaded;
-        SceneLoader.RestartedScene -= OnLevelRestarted;
     }
     
     public static void Pause()
@@ -66,22 +65,22 @@ public class Game : Singleton<Game>
     
     private void LoadNextLevel()
     {
+        _player.Set(false);
+        
+        ProcessPlayer();
+        
         RequestedNextLevel?.Invoke();
-        
-        Resume();
-        
-        _channel.Raise(_player);
     }
 
     private void Restart() => RequestedRestart?.Invoke();
     
-    private void OnLevelRestarted()
+    private void ProcessPlayer()
     {
-        _player.transform.position = _startPosition;
-
-        _player.ResetCharacteristics();
-        
         Resume();
+        
+        _player.Set(_startPosition);
+        
+        _player.ResetCharacteristics();
         
         _channel.Raise(_player);
     }
@@ -100,6 +99,12 @@ public class Game : Singleton<Game>
     
     private void OnAllScenesLoaded()
     {
+        ProcessPlayer();
+        
+        _player.Set(true);
+        
         _channel.Raise(_player);
     }
+    
+    private void OnPlayerDetected() => _player.Set(false);
 }

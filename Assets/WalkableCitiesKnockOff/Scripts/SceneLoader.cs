@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,7 +18,6 @@ public class SceneLoader : Singleton<SceneLoader>
     [SerializeField] private SceneGroup[] _sceneGroups;
 
     public static event Action Loaded;
-    public static event Action RestartedScene;
     
     private float _targetProgress;
     private int _currentSceneIndex;
@@ -76,6 +76,8 @@ public class SceneLoader : Singleton<SceneLoader>
         _currentSceneIndex++;
 
         await LoadSceneGroup(_currentSceneIndex);
+        
+        Loaded?.Invoke();
     }
     
     private async UniTask LoadSceneGroup(int index)
@@ -139,6 +141,6 @@ public class SceneLoader : Singleton<SceneLoader>
     {
        await _groupHandler.RestartActiveScene();
 
-       RestartedScene?.Invoke();
+       Loaded?.Invoke();
     }
 }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wall : BasicObject, ISoundOwner
+public class Wall : BasicObject, ISoundOwner, IBlockable
 {
     [SerializeField] private ESoundType _type = ESoundType.Wall;
 

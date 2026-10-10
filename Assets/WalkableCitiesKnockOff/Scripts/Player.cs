@@ -7,7 +7,7 @@ using NUnit.Framework;
 using TMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(Collider))]
 public class Player : MonoBehaviour, IPlayer
 {
     [SerializeField] private InputReader _inputReader;
@@ -25,9 +25,9 @@ public class Player : MonoBehaviour, IPlayer
     private Rigidbody2D _rigidbody;
     private Vector2 _currentFootPosition;
     private float _currentFootRotation;
+    private bool _canMove;
 
     public Vector2 Position => transform.position;
-    public Quaternion Rotation => transform.rotation;
     public bool IsAccepting => _inputReader.IsHoldingAccept;
     public string AcceptButton => _inputReader.AcceptButton;
     public string RestartButton => _inputReader.RestartButton;
@@ -89,18 +89,20 @@ public class Player : MonoBehaviour, IPlayer
     
     private void OnChangeKeyPressed()
     {
-        if (Game.IsPaused)
+        Debug.Log(_canMove);
+        
+        if (!_canMove)
             return;
         
         ChangePosition();
         
         Stepped?.Invoke();
         
-        var soundOwner = _soundVerifier.DetermineSound(_currentFootPosition, _currentFootRotation);
+        var soundOwner = _soundVerifier.DetermineSound(_currentFootPosition);
         
         HitSoundOwner?.Invoke(soundOwner, Position);
     }
-
+    
     private void OnResetPressed() => RequestedRestart?.Invoke();
     
     private void OnHitKickable(IKickable kickable, Vector2 direction)
@@ -112,15 +114,6 @@ public class Player : MonoBehaviour, IPlayer
     
     private void OnHit(ISoundOwner soundOwner) => HitSoundOwner?.Invoke(soundOwner.Type, Position);
     
-    private void OnStuck(Vector2 separation)
-    {
-        Vector3 offset = new Vector3(separation.x, separation.y, 0);
-        
-        transform.position += offset;
-        
-        ChangePosition();
-    }
-    
     private void ChangePosition()
     {
         _feetHandler.Switch();
@@ -128,5 +121,10 @@ public class Player : MonoBehaviour, IPlayer
         _currentFootRotation = _feetHandler.GetRotation();
         _rotator.SetPoint(_currentFootPosition);
         _rotator.SwitchPosition();
+    }
+
+    public void Set(bool value)
+    {
+        _canMove = value;
     }
 }

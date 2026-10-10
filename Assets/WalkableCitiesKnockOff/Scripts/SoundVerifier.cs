@@ -20,7 +20,7 @@ public class SoundVerifier : MonoBehaviour
         _colliders = new Collider2D[_collidersAmount];
     }
 
-    public ESoundType DetermineSound(Vector2 position, float angle)
+    public ESoundType DetermineSound(Vector2 position)
     {
         _position = position;
         

@@ -56,7 +56,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: b7b7b57288a0f2f4abfda3cfdda1d29b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -147,7 +147,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 320
   m_Interpolate: 0
   m_SleepingMode: 0
   m_CollisionDetection: 0
@@ -167,6 +167,9 @@ MonoBehaviour:
   RigidbodyType: 0
   _isTrigger: 0
   _type: 6
+  _layerToIgnoreAfterHit:
+    serializedVersion: 2
+    m_Bits: 0
   _soundRequestChannel: {fileID: 11400000, guid: c7c870135597a1b4b9f61c2e1cabe339, type: 2}
 --- !u!114 &140657031139172071
 MonoBehaviour:

@@ -1183,7 +1183,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 4df36640ba6abe84e912f15ff44708aa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1868,7 +1868,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 12.540335, y: 5.6316357}
+  m_Offset: {x: 12.540335, y: -2.0778656}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1878,7 +1878,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 5.98991, y: 22.730007}
+  m_Size: {x: 23.30988, y: 4.776375}
   m_EdgeRadius: 0
 --- !u!4 &1156861765
 Transform:
@@ -1889,7 +1889,7 @@ Transform:
   m_GameObject: {fileID: 1156861761}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 22.56, y: -13.37, z: 0.17778401}
+  m_LocalPosition: {x: -33.8, y: 24.9, z: 0.17778401}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2179,6 +2179,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6002679620437149506, guid: 8a7df31b390b76c45be9fe2d2e1498ae, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b7b7b57288a0f2f4abfda3cfdda1d29b, type: 2}
     - target: {fileID: 6883863426087594509, guid: 8a7df31b390b76c45be9fe2d2e1498ae, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.89

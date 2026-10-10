@@ -9,10 +9,6 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
 public class CollisionHandler : MonoBehaviour
 {
-    [SerializeField] private int _amountToCheck = 30;
-    [SerializeField] private ContactFilter2D _filter;
-    [SerializeField] private MovementVerifier _verifier;
-    
     public event Action HitWall;
     public event Action<IKickable, Vector2> HitKickable;
     public event Action<ISoundOwner> HitSoundOwner;
@@ -27,16 +23,6 @@ public class CollisionHandler : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    private void OnEnable()
-    {
-        _verifier.DetectedCollider += Process;
-    }
-
-    private void OnDisable()
-    {
-        _verifier.DetectedCollider -= Process;
-    }
-
     private void OnCollisionEnter2D(Collision2D other)
     {
         var otherCollider = other.collider;
@@ -46,6 +32,11 @@ public class CollisionHandler : MonoBehaviour
         Process(otherCollider);
     }
 
+    public void SetActive(bool value)
+    {
+        _collider.enabled = value;
+    }
+    
     private void Process(Collider2D other)
     {
         if (other.TryGetComponent(out Wall _))

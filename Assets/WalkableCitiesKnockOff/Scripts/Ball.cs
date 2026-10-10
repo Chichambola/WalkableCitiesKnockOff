@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class Ball : BasicObject, IKickable, ISoundOwner
+public class Ball : BasicObject, IKickable, ISoundOwner, ISearchable
 {
     [SerializeField] private ESoundType _type = ESoundType.Ball;
     [SerializeField] private SoundRequestChannel _soundRequestChannel;
@@ -13,6 +13,8 @@ public class Ball : BasicObject, IKickable, ISoundOwner
     private bool _canBeKicked;
     
     public ESoundType Type => _type;
+    public Vector2 Position => transform.position;
+
     private void OnEnable()
     {
         _canBeKicked = true;
@@ -23,7 +25,7 @@ public class Ball : BasicObject, IKickable, ISoundOwner
         if (!_canBeKicked)
             return;
         
-        Rigidbody.AddRelativeForce(directionForce, ForceMode2D.Impulse);
+        Rigidbody.AddForce(directionForce.normalized, ForceMode2D.Impulse);
         
         _soundRequestChannel.Raise(_type, transform.position);
 

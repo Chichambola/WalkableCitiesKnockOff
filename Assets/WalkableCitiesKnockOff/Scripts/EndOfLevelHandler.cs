@@ -8,11 +8,11 @@ using UnityEngine;
 public class EndOfLevelHandler : Singleton<EndOfLevelHandler>
 {
     [SerializeField] private Canvas _canvas;
-    [SerializeField] private TextMeshProUGUI _text;
     [SerializeField] private SliderHandler _sliderHandler;
     [SerializeField] private bool _isImmediateLevelChanging = false;
 
     public static event Action RequestedEndOfLevel;
+    public static event Action DetectedPlayer;
     
     private IPlayer _player;
     private CancellationTokenSource _cts;
@@ -35,8 +35,6 @@ public class EndOfLevelHandler : Singleton<EndOfLevelHandler>
     protected override void Awake()
     {
         base.Awake();
-        
-        _text.text = "";
 
         _initialPosition = transform.position;
     }
@@ -69,11 +67,10 @@ public class EndOfLevelHandler : Singleton<EndOfLevelHandler>
         if (!_isImmediateLevelChanging)
         {
             Game.Pause();
-
-            _text.text = $"Hold {_player.AcceptButton.ToUpper()} to proceed to the next level\n" +
-                         $"Press {_player.RestartButton.ToUpper()} to restart level";
             
             SetActive(true);
+            
+            DetectedPlayer?.Invoke();
             
             _cts = new CancellationTokenSource();
             _cts.RegisterRaiseCancelOnDestroy(this);

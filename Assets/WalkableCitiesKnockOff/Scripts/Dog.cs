@@ -1,45 +1,33 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using PrimeTween;
 using UnityEngine;
-using UnityEngine.InputSystem.iOS;
-using UnityEngine.Rendering;
-using UnityEngine.Serialization;
 
 public class Dog : BasicObject
 {
-    [SerializeField] private BirdSearcher _birdSearcher;
+    [SerializeField] private SearchableFinder _birdSearcher;
     [SerializeField] private Kicker _kicker;
+    [SerializeField] private CollisionHandler _collisionHandler;
     [Header("Tween settings")]
     [SerializeField] private float _interval = 2f;
-    [SerializeField] private float _duration = 1.5f;
-    [SerializeField] private Ease _ease;
+    [SerializeField] private float _force = 1.5f;
 
     private CancellationTokenSource _cts;
-    private TweenSettings<Vector2> _settings;
-
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.collider.TryGetComponent(out IKickable kickable))
-        {
-            kickable.ChangeDirection(other.contacts[0].point);
-        }
-    }
 
     private void OnEnable()
     {
+        _collisionHandler.HitKickable += OnHitKickable;
+        
         _cts = new CancellationTokenSource();
-
-        _settings.settings.duration = _duration;
         
         LookForTask(_cts.Token).Forget();
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
+        _collisionHandler.HitKickable -= OnHitKickable;
+        
         _cts?.Dispose();
     }
     
@@ -48,17 +36,44 @@ public class Dog : BasicObject
         while (!token.IsCancellationRequested)
         {
             await UniTask.Delay(TimeSpan.FromSeconds(_interval), cancellationToken: token);
-
+            
             if (!_birdSearcher.TryFind(out var hits))
                 continue;
 
-            var bird = _birdSearcher.FindClosest(hits);
-
-            _settings.startValue = transform.position;
-            _settings.endValue = bird.transform.position;
-            _settings.settings.ease = _ease;
+            if (hits.Count == 0)
+                continue;
             
-            await Sequence.Create().Group(Tween.RigidbodyMovePosition(Rigidbody, _settings)).ToYieldInstruction().WithCancellation(token);
+            bool isBlocked = true;
+
+            ISearchable searchable = null;
+            
+            while (isBlocked && hits.Count > 0)
+            {
+                searchable = _birdSearcher.FindClosest(hits);
+
+                if (_birdSearcher.IsBlocked(searchable))
+                {
+                    if (hits.Count == 0)
+                        continue;
+                    
+                    hits.Remove(searchable);
+
+                    searchable = null;
+                }
+                else
+                    isBlocked = false;
+            }
+
+            if (searchable == null)
+                continue;
+
+            Vector2 direction = transform.position - new Vector3(searchable.Position.x, searchable.Position.y);
+
+            Rigidbody.velocity = -direction.normalized * _force;
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(_interval), cancellationToken: token);
         }
     }
+    
+    private void OnHitKickable(IKickable kickable, Vector2 direction) => _kicker.Execute(kickable, direction);
 }

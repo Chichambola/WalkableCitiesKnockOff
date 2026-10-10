@@ -186,10 +186,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 203448232}
     m_Modifications:
-    - target: {fileID: 2217852534703898688, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: _soundRequestChannel
-      value: 
-      objectReference: {fileID: 11400000, guid: c7c870135597a1b4b9f61c2e1cabe339, type: 2}
     - target: {fileID: 4700054101680401653, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_Name
       value: Bird (8)
@@ -233,10 +229,6 @@ PrefabInstance:
     - target: {fileID: 4928904821652136650, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8258352550693012606, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: m_ExcludeLayers.m_Bits
-      value: 320
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -401,10 +393,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 203448232}
     m_Modifications:
-    - target: {fileID: 2217852534703898688, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: _soundRequestChannel
-      value: 
-      objectReference: {fileID: 11400000, guid: c7c870135597a1b4b9f61c2e1cabe339, type: 2}
     - target: {fileID: 4700054101680401653, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_Name
       value: Bird (7)
@@ -449,10 +437,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8258352550693012606, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: m_ExcludeLayers.m_Bits
-      value: 320
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -482,10 +466,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 203448232}
     m_Modifications:
-    - target: {fileID: 2217852534703898688, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: _soundRequestChannel
-      value: 
-      objectReference: {fileID: 11400000, guid: c7c870135597a1b4b9f61c2e1cabe339, type: 2}
     - target: {fileID: 4700054101680401653, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_Name
       value: Bird (3)
@@ -530,10 +510,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8258352550693012606, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: m_ExcludeLayers.m_Bits
-      value: 320
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -563,10 +539,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 203448232}
     m_Modifications:
-    - target: {fileID: 2217852534703898688, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: _soundRequestChannel
-      value: 
-      objectReference: {fileID: 11400000, guid: c7c870135597a1b4b9f61c2e1cabe339, type: 2}
     - target: {fileID: 4700054101680401653, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_Name
       value: Bird
@@ -610,10 +582,6 @@ PrefabInstance:
     - target: {fileID: 4928904821652136650, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8258352550693012606, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: m_ExcludeLayers.m_Bits
-      value: 320
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1473,10 +1441,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 203448232}
     m_Modifications:
-    - target: {fileID: 2217852534703898688, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: _soundRequestChannel
-      value: 
-      objectReference: {fileID: 11400000, guid: c7c870135597a1b4b9f61c2e1cabe339, type: 2}
     - target: {fileID: 4700054101680401653, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_Name
       value: Bird (6)
@@ -1521,10 +1485,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8258352550693012606, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: m_ExcludeLayers.m_Bits
-      value: 320
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1554,10 +1514,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 203448232}
     m_Modifications:
-    - target: {fileID: 2217852534703898688, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: _soundRequestChannel
-      value: 
-      objectReference: {fileID: 11400000, guid: c7c870135597a1b4b9f61c2e1cabe339, type: 2}
     - target: {fileID: 4700054101680401653, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_Name
       value: Bird (4)
@@ -1602,10 +1558,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8258352550693012606, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: m_ExcludeLayers.m_Bits
-      value: 320
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1635,10 +1587,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 203448232}
     m_Modifications:
-    - target: {fileID: 2217852534703898688, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: _soundRequestChannel
-      value: 
-      objectReference: {fileID: 11400000, guid: c7c870135597a1b4b9f61c2e1cabe339, type: 2}
     - target: {fileID: 4700054101680401653, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_Name
       value: Bird (5)
@@ -1682,10 +1630,6 @@ PrefabInstance:
     - target: {fileID: 4928904821652136650, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8258352550693012606, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: m_ExcludeLayers.m_Bits
-      value: 320
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2190,7 +2134,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 4df36640ba6abe84e912f15ff44708aa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2840,10 +2784,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 203448232}
     m_Modifications:
-    - target: {fileID: 2217852534703898688, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: _soundRequestChannel
-      value: 
-      objectReference: {fileID: 11400000, guid: c7c870135597a1b4b9f61c2e1cabe339, type: 2}
     - target: {fileID: 4700054101680401653, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_Name
       value: Bird (9)
@@ -2887,10 +2827,6 @@ PrefabInstance:
     - target: {fileID: 4928904821652136650, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8258352550693012606, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: m_ExcludeLayers.m_Bits
-      value: 320
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2999,10 +2935,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 203448232}
     m_Modifications:
-    - target: {fileID: 2217852534703898688, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: _soundRequestChannel
-      value: 
-      objectReference: {fileID: 11400000, guid: c7c870135597a1b4b9f61c2e1cabe339, type: 2}
     - target: {fileID: 4700054101680401653, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_Name
       value: Bird (2)
@@ -3046,10 +2978,6 @@ PrefabInstance:
     - target: {fileID: 4928904821652136650, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8258352550693012606, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: m_ExcludeLayers.m_Bits
-      value: 320
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3154,6 +3082,7 @@ MonoBehaviour:
     _underlyingValue: {fileID: 105410066}
   _offset: 10
   _duration: 1.5
+  _isXAxis: 1
 --- !u!212 &1626761170
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3229,10 +3158,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 203448232}
     m_Modifications:
-    - target: {fileID: 2217852534703898688, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: _soundRequestChannel
-      value: 
-      objectReference: {fileID: 11400000, guid: c7c870135597a1b4b9f61c2e1cabe339, type: 2}
     - target: {fileID: 4700054101680401653, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_Name
       value: Bird (10)
@@ -3276,10 +3201,6 @@ PrefabInstance:
     - target: {fileID: 4928904821652136650, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8258352550693012606, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: m_ExcludeLayers.m_Bits
-      value: 320
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5407,7 +5328,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 79947c24643f1644082e8cd6c01e2fa6, type: 2}
+  - {fileID: 2100000, guid: 49ea85958d20a8c4f8e3f57a2d6874c7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5462,10 +5383,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 203448232}
     m_Modifications:
-    - target: {fileID: 2217852534703898688, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: _soundRequestChannel
-      value: 
-      objectReference: {fileID: 11400000, guid: c7c870135597a1b4b9f61c2e1cabe339, type: 2}
     - target: {fileID: 4700054101680401653, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
       propertyPath: m_Name
       value: Bird (1)
@@ -5510,10 +5427,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8258352550693012606, guid: 04ab0ccd395f9f1418dbd6b59565665c, type: 3}
-      propertyPath: m_ExcludeLayers.m_Bits
-      value: 320
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5547,6 +5460,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dog
       objectReference: {fileID: 0}
+    - target: {fileID: 6337162943097090201, guid: 6c0752e18e83f6e4bb95e90aaa379ba5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b7b7b57288a0f2f4abfda3cfdda1d29b, type: 2}
     - target: {fileID: 7554193525129377687, guid: 6c0752e18e83f6e4bb95e90aaa379ba5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.29

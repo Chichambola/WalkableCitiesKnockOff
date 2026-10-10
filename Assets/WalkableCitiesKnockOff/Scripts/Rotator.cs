@@ -19,6 +19,7 @@ public class Rotator : MonoBehaviour
     private int _backward = -1;
     private int _count;
     private float _currentRotation;
+    private float _pushMultiplier = .5f;
     private Vector2 _currentPosition;
     private Rigidbody2D _rigidbody;
 
@@ -31,7 +32,30 @@ public class Rotator : MonoBehaviour
     {
         _rigidbody.centerOfMass = Vector2.zero;
     }
+
+    private int _collisionCount;
     
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        _collisionCount++;
+
+        if (!(_collisionCount > _threshold))
+            return;
+
+        var direction = new Vector3(other.contacts[0].normal.x, other.contacts[0].normal.y) * _pushMultiplier;
+        
+        transform.position += direction;
+        
+        SwitchDirection();
+
+        _collisionCount = 0;
+    }
+
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        _collisionCount = 0;
+    }
+
     private void FixedUpdate()
     {
         if (_spinDirection == 0)
@@ -49,37 +73,8 @@ public class Rotator : MonoBehaviour
         var nextPos = (Vector2)_rotatePoint.position + rotatedOffset;
 
         var nextAngle = _currentRotation + angleDelta;
-
-        Debug.Log($"Current Angle: {_currentRotation} \n" +
-                  $"Angle: {Mathf.Deg2Rad * angleDelta} \n");
         
         _rigidbody.MovePositionAndRotation(nextPos, nextAngle);
-        
-        if (_verifier.TryMove(_rigidbody, nextPos, out Wall wall))
-        {
-            _count = 0;
-        }
-        else
-        {
-            if (wall != null)
-                _rigidbody.MovePositionAndRotation(_currentPosition, _currentRotation);
-            
-            if (_count >= _threshold)
-            {
-                SwitchDirection();
-                _count = 0;
-            }
-            else
-            {
-                _count++;
-            }
-        }
-    }
-
-    private float AngleDifference(float angle1, float angle2)
-    {
-        float diff = (angle1 - angle2 + 180f) % 360f - 180f;
-        return diff;
     }
     
     public void SwitchPosition()

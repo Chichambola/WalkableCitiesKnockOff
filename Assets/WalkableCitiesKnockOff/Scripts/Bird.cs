@@ -5,14 +5,16 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class Bird : BasicObject, IKickable, ISoundOwner
+public class Bird : BasicObject, IKickable, ISoundOwner, ISearchable
 {
     [SerializeField] private ESoundType _type = ESoundType.Bird;
+    [SerializeField] private LayerMask _layerToIgnoreAfterHit;
     [SerializeField] private SoundRequestChannel _soundRequestChannel;
     
     private bool _canBeKicked;
     
     public ESoundType Type => _type;
+    public Vector2 Position => transform.position;
 
     private void OnEnable()
     {
@@ -24,7 +26,7 @@ public class Bird : BasicObject, IKickable, ISoundOwner
         if (!_canBeKicked)
             return;
         
-        Rigidbody.AddRelativeForce(directionForce, ForceMode2D.Impulse);
+        Rigidbody.velocity = directionForce.normalized;
         
         _soundRequestChannel.Raise(_type, transform.position);
 
