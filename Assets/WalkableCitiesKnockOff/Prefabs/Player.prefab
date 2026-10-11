@@ -16,10 +16,10 @@ GameObject:
   - component: {fileID: 769612640584325650}
   - component: {fileID: 5121270373160163906}
   - component: {fileID: 8352914855604755305}
-  - component: {fileID: 1169431769209709315}
   - component: {fileID: 8736984792640614276}
   - component: {fileID: 3633659335933790250}
   - component: {fileID: 8266839911397880201}
+  - component: {fileID: 1354577853619926853}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 3042725812312239711}
   _feetHandler: {fileID: 8553850618875716821}
-  _rotator: {fileID: 1169431769209709315}
+  _rotator: {fileID: 1354577853619926853}
   _kicker: {fileID: 769612640584325650}
   _collisionHandler: {fileID: 8352914855604755305}
   _soundVerifier: {fileID: 5121270373160163906}
@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f35ee7476c4af22429f491d9472d26d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _force: 23.4
+  _force: 8
 --- !u!114 &5121270373160163906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,22 +172,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0956037fcd6a2bc4dbfee122396a074d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1169431769209709315
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2532486483670396583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df9d8a68b6361a84d9579b732ffda9b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _spinSpeed: 225
-  _threshold: 10
-  _verifier: {fileID: 8736984792640614276}
-  _rotatePoint: {fileID: 2543166452452996770}
 --- !u!114 &8736984792640614276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,6 +199,7 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
+  _skinLength: 0.02
 --- !u!50 &3633659335933790250
 Rigidbody2D:
   serializedVersion: 4
@@ -279,6 +264,24 @@ CapsuleCollider2D:
   m_Offset: {x: -0.14271049, y: -0.3762751}
   m_Size: {x: 2.3819282, y: 0.5903172}
   m_Direction: 1
+--- !u!114 &1354577853619926853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2532486483670396583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a001bd495b2943249ef683f359054bc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spinSpeed: 200
+  _spinDirection: 1
+  _rotatePoint: {fileID: 2543166452452996770}
+  _rigidbody: {fileID: 3633659335933790250}
+  _stuckFramesThreshold: 10
+  _stuckRotationRatio: 0.1
 --- !u!1 &3537910026501604789
 GameObject:
   m_ObjectHideFlags: 0
