@@ -89,8 +89,6 @@ public class Player : MonoBehaviour, IPlayer
     
     private void OnChangeKeyPressed()
     {
-        Debug.Log(_canMove);
-        
         if (!_canMove)
             return;
         

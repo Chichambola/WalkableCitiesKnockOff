@@ -31,8 +31,6 @@ public class Searcher<T> : MonoBehaviour where T : ISearchable
                 detectedHits.Add(type);
             }
         }
-
-        Debug.Log(detectedHits.Count);
         
         return detectedHits.Count != 0;
     }

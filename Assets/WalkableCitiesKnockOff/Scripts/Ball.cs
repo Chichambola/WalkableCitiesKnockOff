@@ -25,7 +25,7 @@ public class Ball : BasicObject, IKickable, ISoundOwner, ISearchable
         if (!_canBeKicked)
             return;
         
-        Rigidbody.AddForce(directionForce.normalized, ForceMode2D.Impulse);
+        Rigidbody.AddForce(directionForce, ForceMode2D.Impulse);
         
         _soundRequestChannel.Raise(_type, transform.position);
 
