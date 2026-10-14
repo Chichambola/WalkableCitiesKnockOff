@@ -19,12 +19,12 @@ public class ScoreHandler : Singleton<ScoreHandler>
     private IPlayer _player;
     
     private static int s_currentStepCount;
-    private static int s_wholeAmount;
+    private static int s_wholeStepAmount;
     private static Canvas s_scoreCanvas;
     
     private void OnEnable()
     {
-        Game.RequestedRestart += OnRestart;
+        Game.RequestedRestart += Restore;
         Game.RequestedNextLevel += OnRequestedNextLevel;
         EndOfLevelHandler.DetectedPlayer += OnPlayerDetected;
         _channel.Raised += OnLoaded;
@@ -38,13 +38,13 @@ public class ScoreHandler : Singleton<ScoreHandler>
 
     private void OnDisable()
     {
-        Game.RequestedRestart -= OnRestart;
+        Game.RequestedRestart -= Restore;
         Game.RequestedNextLevel -= OnRequestedNextLevel;
         EndOfLevelHandler.DetectedPlayer -= OnPlayerDetected;
         _channel.Raised -= OnLoaded;
 
         s_currentStepCount = 0;
-        s_wholeAmount = 0;
+        s_wholeStepAmount = 0;
     }
     
     public static void Hide()
@@ -64,20 +64,13 @@ public class ScoreHandler : Singleton<ScoreHandler>
 
     private async UniTask OnRequestedNextLevel()
     {
-        s_wholeAmount += s_currentStepCount;
+        s_wholeStepAmount += s_currentStepCount;
         
         Restore();
 
         _totalScore.enabled = false;
         
         await UniTask.Yield();
-    }
-
-    private void OnRestart()
-    {
-        s_wholeAmount -= s_currentStepCount;
-        
-        Restore();
     }
 
     private void Restore()
@@ -107,7 +100,7 @@ public class ScoreHandler : Singleton<ScoreHandler>
     private void OnPlayerDetected()
     {
         _totalScoreText.SetText($"Steps this level: {s_currentStepCount}\n" +
-                                  $"Steps total: {s_wholeAmount + s_currentStepCount}");
+                                  $"Steps total: {s_wholeStepAmount + s_currentStepCount}");
         
         _totalScore.enabled = true;
     }

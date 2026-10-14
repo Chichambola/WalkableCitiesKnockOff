@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 8736984792640614276}
   - component: {fileID: 3633659335933790250}
   - component: {fileID: 8266839911397880201}
-  - component: {fileID: 1354577853619926853}
+  - component: {fileID: 9123793365168670712}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -36,7 +36,7 @@ Transform:
   m_GameObject: {fileID: 2532486483670396583}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.025742583, y: -0.15296978, z: 20.17}
+  m_LocalPosition: {x: -0.18476936, y: -0.052609384, z: 20.17}
   m_LocalScale: {x: 2.2, y: 2.2, z: 2.2}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 3042725812312239711}
   _feetHandler: {fileID: 8553850618875716821}
-  _rotator: {fileID: 1354577853619926853}
+  _rotator: {fileID: 9123793365168670712}
   _kicker: {fileID: 769612640584325650}
   _collisionHandler: {fileID: 8352914855604755305}
   _soundVerifier: {fileID: 5121270373160163906}
@@ -199,7 +199,6 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
-  _skinLength: 0.02
 --- !u!50 &3633659335933790250
 Rigidbody2D:
   serializedVersion: 4
@@ -264,7 +263,7 @@ CapsuleCollider2D:
   m_Offset: {x: -0.14271049, y: -0.3762751}
   m_Size: {x: 2.3819282, y: 0.5903172}
   m_Direction: 1
---- !u!114 &1354577853619926853
+--- !u!114 &9123793365168670712
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -273,15 +272,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2532486483670396583}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a001bd495b2943249ef683f359054bc8, type: 3}
+  m_Script: {fileID: 11500000, guid: df9d8a68b6361a84d9579b732ffda9b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _spinSpeed: 200
-  _spinDirection: 1
-  _rotatePoint: {fileID: 2543166452452996770}
-  _rigidbody: {fileID: 3633659335933790250}
+  _stuckRotationThreshold: 0.7
   _stuckFramesThreshold: 10
-  _stuckRotationRatio: 0.1
+  _rotatePoint: {fileID: 2543166452452996770}
 --- !u!1 &3537910026501604789
 GameObject:
   m_ObjectHideFlags: 0

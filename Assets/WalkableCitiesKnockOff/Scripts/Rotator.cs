@@ -9,8 +9,8 @@ using UnityEngine;
 public class Rotator : MonoBehaviour
 {
     [SerializeField] private float _spinSpeed = 200;
-    [SerializeField] private float _threshold;
-    [SerializeField] private MovementVerifier _verifier;
+    [SerializeField] private float _stuckRotationThreshold;
+    [SerializeField] private int _stuckFramesThreshold = 10;
     [SerializeField] private Transform _rotatePoint;
 
     private bool _isFlipped;
@@ -18,8 +18,9 @@ public class Rotator : MonoBehaviour
     private int _forward = 1;
     private int _backward = -1;
     private int _count;
+    private int _stuckFrames;
     private float _currentRotation;
-    private float _pushMultiplier = .5f;
+    private float _lastRotation;
     private Vector2 _currentPosition;
     private Rigidbody2D _rigidbody;
 
@@ -32,30 +33,7 @@ public class Rotator : MonoBehaviour
     {
         _rigidbody.centerOfMass = Vector2.zero;
     }
-
-    private int _collisionCount;
     
-    private void OnCollisionStay2D(Collision2D other)
-    {
-        _collisionCount++;
-
-        if (!(_collisionCount > _threshold))
-            return;
-
-        var direction = new Vector3(other.contacts[0].normal.x, other.contacts[0].normal.y) * _pushMultiplier;
-        
-        transform.position += direction;
-        
-        SwitchDirection();
-
-        _collisionCount = 0;
-    }
-
-    private void OnCollisionExit2D(Collision2D other)
-    {
-        _collisionCount = 0;
-    }
-
     private void FixedUpdate()
     {
         if (_spinDirection == 0)
@@ -64,6 +42,27 @@ public class Rotator : MonoBehaviour
         _currentPosition = _rigidbody.position;
         _currentRotation = _rigidbody.rotation;
 
+        float actualDelta = Mathf.Abs(Mathf.DeltaAngle(_currentRotation, _lastRotation));
+        
+        float expectedDelta = Mathf.Abs(_spinSpeed * Time.fixedDeltaTime);
+
+        if (actualDelta < expectedDelta * _stuckRotationThreshold)
+        {
+            _stuckFrames++;
+        }
+        else
+        {
+            _stuckFrames = 0;
+        }
+        
+        if (_stuckFrames >= _stuckFramesThreshold)
+        {
+            SwitchDirection();
+            _stuckFrames = 0;
+        }
+        
+        _lastRotation = _currentRotation;
+        
         Vector2 offset = _currentPosition - (Vector2)_rotatePoint.position;
 
         float angleDelta = _spinSpeed * Time.fixedDeltaTime * _spinDirection;
@@ -81,13 +80,13 @@ public class Rotator : MonoBehaviour
     {
         if (_isFlipped)
         {
-            _spinDirection = _backward;
+            _spinDirection = _forward;
             _isFlipped = false;
         }
         else
         {
             _isFlipped = true;
-            _spinDirection = _forward;
+            _spinDirection = _backward;
         }
     }
     
@@ -101,9 +100,10 @@ public class Rotator : MonoBehaviour
         _rotatePoint.position = point;
     }
 
-    public void ResetCharacteristics(Vector2 point)
+    public void ResetCharacteristics()
     {
-        SetPoint(point);
+        SetPoint(Vector2.zero);
         _spinDirection = 0;
+        _isFlipped = true;
     }
 }

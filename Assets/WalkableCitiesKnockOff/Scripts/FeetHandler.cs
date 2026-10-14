@@ -18,6 +18,7 @@ public class FeetHandler : MonoBehaviour
     private Foot _inactiveFoot;
     private Vector3 _lastPosition;
     private Quaternion _lastRotation;
+    private bool _isLeftInitialFoot;
     
     private void Awake()
     {
@@ -25,21 +26,21 @@ public class FeetHandler : MonoBehaviour
         {
             _activeFoot = _leftFoot;
             _inactiveFoot = _rightFoot;
+            _isLeftInitialFoot = true;
         }
         else
         {
             _activeFoot = _rightFoot;
             _inactiveFoot = _leftFoot;
+            _isLeftInitialFoot = false;
         }
-    }
 
-    private void OnValidate()
-    {
         if (!_leftFoot.IsActive && !_rightFoot.IsActive)
+        {
             _rightFoot.SetActive(true);
-        
-        if (_leftFoot.IsActive && _rightFoot.IsActive)
-            _leftFoot.SetActive(false);
+            _activeFoot = _rightFoot;
+            _inactiveFoot = _leftFoot;
+        }
     }
 
     private void OnDestroy()
@@ -67,7 +68,23 @@ public class FeetHandler : MonoBehaviour
 
     public void ResetFeet()
     {
+        _activeFoot   = _isLeftInitialFoot ? _leftFoot : _rightFoot;
+        _inactiveFoot = _isLeftInitialFoot ? _rightFoot : _leftFoot;
+
+        _activeFoot.SetActive(true);
+        _inactiveFoot.SetActive(false);
+        
         _activeFoot.ResetCharacteristics();
         _inactiveFoot.ResetCharacteristics();
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!Application.isPlaying)
+            return;
+        
+        Gizmos.color =Color.red;
+        
+        Gizmos.DrawSphere(_activeFoot.Position, 1f);
     }
 }

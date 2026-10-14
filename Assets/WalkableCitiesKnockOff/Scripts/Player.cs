@@ -82,7 +82,7 @@ public class Player : MonoBehaviour, IPlayer
     
     public void ResetCharacteristics()
     {
-        _rotator.ResetCharacteristics(Vector2.zero);
+        _rotator.ResetCharacteristics();
 
         _feetHandler.ResetFeet();
     }
