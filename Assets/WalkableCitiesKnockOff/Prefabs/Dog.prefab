@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2135585597343286014, guid: 5aa8b770bc43046bc8d993d0d5b7f4a5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 945a7305ee83ec94a8a4609a6d090c74, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -107,6 +107,7 @@ MonoBehaviour:
   _birdSearcher: {fileID: 7318439219160986666}
   _kicker: {fileID: 7679359766037091194}
   _collisionHandler: {fileID: 2178800236867649838}
+  _channel: {fileID: 11400000, guid: c7c870135597a1b4b9f61c2e1cabe339, type: 2}
   _interval: 2
   _force: 44.7
 --- !u!114 &7679359766037091194

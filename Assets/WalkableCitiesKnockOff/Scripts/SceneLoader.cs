@@ -13,8 +13,7 @@ public class SceneLoader : Singleton<SceneLoader>
 {
     [SerializeField] private Slider _loadingBar;
     [SerializeField] private float _fillSpeed = 0.5f;
-    [SerializeField] private Canvas _loadingCanvas;
-    [SerializeField] private Camera _loadingCamera;
+    [SerializeField] private LoadingCanvasHandler _canvasHandler;
     [SerializeField] private SceneGroup[] _sceneGroups;
 
     public static event Action Loaded;
@@ -68,9 +67,11 @@ public class SceneLoader : Singleton<SceneLoader>
         _groupHandler.SceneUnloaded -= OnSceneUnloaded;
         _groupHandler.Loaded -= OnHandlerLoaded;
     }
-
+    
     private async UniTask LoadNextScene()
     {
+        await _canvasHandler.ChangeOpacity(1f);
+        
         await _groupHandler.UnloadScenes();
         
         _currentSceneIndex++;
@@ -78,8 +79,10 @@ public class SceneLoader : Singleton<SceneLoader>
         await LoadSceneGroup(_currentSceneIndex);
         
         Loaded?.Invoke();
+        
+        await _canvasHandler.ChangeOpacity(0f);
     }
-    
+
     private async UniTask LoadSceneGroup(int index)
     {
         _currentSceneIndex = index;
@@ -113,11 +116,10 @@ public class SceneLoader : Singleton<SceneLoader>
         _targetProgress = Mathf.Max(value, _targetProgress);
     }
 
-    private void EnableLoadingCanvas(bool enable = true)
+    private void EnableLoadingCanvas(bool value = true)
     {
         _isLoading = true;
-        _loadingCanvas.gameObject.SetActive(enable);
-        _loadingCamera.gameObject.SetActive(enable);
+        _canvasHandler.SetActive(value);
     }
     
     private void OnHandlerLoaded()
@@ -139,8 +141,12 @@ public class SceneLoader : Singleton<SceneLoader>
     
     private async void RestartActiveScene()
     {
+        await _canvasHandler.ChangeOpacity(1f);
+        
        await _groupHandler.RestartActiveScene();
-
+       
        Loaded?.Invoke();
+       
+       await _canvasHandler.ChangeOpacity(0f);
     }
 }

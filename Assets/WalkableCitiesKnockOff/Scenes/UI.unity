@@ -1111,6 +1111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvas: {fileID: 2038907725}
   _sliderHandler: {fileID: 1151405920}
+  _channel: {fileID: 11400000, guid: bf9ac8cdc4df59841b70fe218b0655ef, type: 2}
   _isImmediateLevelChanging: 0
 --- !u!114 &1151405920
 MonoBehaviour:

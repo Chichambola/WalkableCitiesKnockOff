@@ -330,6 +330,9 @@ MonoBehaviour:
     - Key: 5
       Value:
       - {fileID: 8300000, guid: 0a2db8a83aa575f41b424fb524823368, type: 3}
+    - Key: 7
+      Value:
+      - {fileID: 8300000, guid: d567e81022e89c8469f2b7b29f67bd3e, type: 3}
 --- !u!4 &1815962808
 Transform:
   m_ObjectHideFlags: 0

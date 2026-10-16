@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using PrimeTween;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Dog : BasicObject
@@ -9,6 +10,7 @@ public class Dog : BasicObject
     [SerializeField] private SearchableFinder _birdSearcher;
     [SerializeField] private Kicker _kicker;
     [SerializeField] private CollisionHandler _collisionHandler;
+    [SerializeField] private SoundRequestChannel _channel;
     [Header("Tween settings")]
     [SerializeField] private float _interval = 2f;
     [SerializeField] private float _force = 1.5f;
@@ -67,6 +69,8 @@ public class Dog : BasicObject
             if (searchable == null)
                 continue;
 
+            _channel.Raise(ESoundType.Dog, transform.position);
+            
             Vector2 direction = transform.position - new Vector3(searchable.Position.x, searchable.Position.y);
 
             Rigidbody.velocity = -direction.normalized * _force;

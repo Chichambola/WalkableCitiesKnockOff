@@ -2,26 +2,41 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using TMPro.EditorUtilities;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class Guardian : MonoBehaviour
 {
-    [SerializeField] private Canvas _canvas;
+    [SerializeField] private Canvas _textCanvas;
     [SerializeField] private SceneReadyChannel _channel;
     [SerializeField] private SoundRequestChannel _soundRequest;
+    [SerializeField] private Vector2 _offset;
+    [Header("Sound types")]
     [SerializeField] private ESoundType _typeToProtect = ESoundType.Grass;
     [SerializeField] private ESoundType _soundType = ESoundType.Whistle;
-    [SerializeField] private Vector2 _offset;
+    [Header("States Sprites")]
+    [SerializeField] private Sprite _idleSprite;
+    [SerializeField] private Sprite _stopSprite;
+    [SerializeField] private Canvas _speechBubble;
 
     private IPlayer _player;
+    private SpriteRenderer _spriteRenderer;
+
+    private void Awake()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _spriteRenderer.sprite = _idleSprite;
+    }
 
     private void OnEnable()
     {
         _channel.Raised += OnLoaded;
 
-        _canvas.enabled = false;
+        _textCanvas.gameObject.SetActive(false);
+        _speechBubble.gameObject.SetActive(false);
     }
     
     private void OnDisable()
@@ -52,6 +67,8 @@ public class Guardian : MonoBehaviour
             return;
 
         Vector3 newPos = new Vector2(_player.Position.x + _offset.x, _player.Position.y + _offset.y);
+
+        _spriteRenderer.sprite = _stopSprite;
         
         transform.position = newPos;
         
@@ -59,7 +76,8 @@ public class Guardian : MonoBehaviour
         
         Game.Pause();
         
-        _canvas.enabled = true;
+        _textCanvas.gameObject.SetActive(true);
+        _speechBubble.gameObject.SetActive(true);
 
         ScoreHandler.Hide();
     }

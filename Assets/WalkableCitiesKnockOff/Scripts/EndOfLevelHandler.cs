@@ -9,6 +9,7 @@ public class EndOfLevelHandler : Singleton<EndOfLevelHandler>
 {
     [SerializeField] private Canvas _canvas;
     [SerializeField] private SliderHandler _sliderHandler;
+    [SerializeField] private SceneReadyChannel _channel;
     [SerializeField] private bool _isImmediateLevelChanging = false;
 
     public static event Action RequestedEndOfLevel;
@@ -42,7 +43,7 @@ public class EndOfLevelHandler : Singleton<EndOfLevelHandler>
     private void OnEnable()
     {
         _sliderHandler.ReachedMaxValue += OnReachedMaxValue;
-        Game.RequestedRestart += OnRequestedRestart;
+        _channel.Raised += OnSceneReady;
         
         SetActive(false);
     }
@@ -50,7 +51,7 @@ public class EndOfLevelHandler : Singleton<EndOfLevelHandler>
     private void OnDisable()
     {
         _sliderHandler.ReachedMaxValue -= OnReachedMaxValue;
-        Game.RequestedRestart -= OnRequestedRestart;
+        _channel.Raised -= OnSceneReady;
         
         if (s_endOfLevel != null)
         {
@@ -106,8 +107,10 @@ public class EndOfLevelHandler : Singleton<EndOfLevelHandler>
         RequestedEndOfLevel?.Invoke();
     }
     
-    private void OnRequestedRestart()
+    private void OnSceneReady(IPlayer player)
     {
+        _player = player;
+        
         SetActive(false);
     }
 

@@ -18,13 +18,14 @@ public class ScoreHandler : Singleton<ScoreHandler>
     
     private IPlayer _player;
     
-    private static int s_currentStepCount;
+    private int _currentStepCount;
     private static int s_wholeStepAmount;
     private static Canvas s_scoreCanvas;
+
+    public static int StepsAmount => s_wholeStepAmount; 
     
     private void OnEnable()
     {
-        Game.RequestedRestart += Restore;
         Game.RequestedNextLevel += OnRequestedNextLevel;
         EndOfLevelHandler.DetectedPlayer += OnPlayerDetected;
         _channel.Raised += OnLoaded;
@@ -38,12 +39,11 @@ public class ScoreHandler : Singleton<ScoreHandler>
 
     private void OnDisable()
     {
-        Game.RequestedRestart -= Restore;
         Game.RequestedNextLevel -= OnRequestedNextLevel;
         EndOfLevelHandler.DetectedPlayer -= OnPlayerDetected;
         _channel.Raised -= OnLoaded;
 
-        s_currentStepCount = 0;
+        _currentStepCount = 0;
         s_wholeStepAmount = 0;
     }
     
@@ -60,11 +60,15 @@ public class ScoreHandler : Singleton<ScoreHandler>
         _player = player;
 
         _player.Stepped += OnStep;
+        
+        Restore();
     }
 
     private async UniTask OnRequestedNextLevel()
     {
-        s_wholeStepAmount += s_currentStepCount;
+        Debug.Log(_currentStepCount);
+        
+        s_wholeStepAmount += _currentStepCount;
         
         Restore();
 
@@ -75,7 +79,7 @@ public class ScoreHandler : Singleton<ScoreHandler>
 
     private void Restore()
     {
-        s_currentStepCount = 0;
+        _currentStepCount = 0;
 
         _totalScore.enabled = false;
 
@@ -87,20 +91,20 @@ public class ScoreHandler : Singleton<ScoreHandler>
     
     private void OnStep()
     {
-        s_currentStepCount++;
+        _currentStepCount++;
         
         UpdateText();
     }
 
     private void UpdateText()
     {
-        _scoreText.text = $"Score: {s_currentStepCount}";
+        _scoreText.text = $"Score: {_currentStepCount}";
     }
     
     private void OnPlayerDetected()
     {
-        _totalScoreText.SetText($"Steps this level: {s_currentStepCount}\n" +
-                                  $"Steps total: {s_wholeStepAmount + s_currentStepCount}");
+        _totalScoreText.SetText($"Steps this level: {_currentStepCount}\n" +
+                                  $"Steps total: {s_wholeStepAmount + _currentStepCount}");
         
         _totalScore.enabled = true;
     }

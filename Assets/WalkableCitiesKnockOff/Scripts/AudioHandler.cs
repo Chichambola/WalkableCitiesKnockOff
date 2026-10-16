@@ -69,5 +69,6 @@ public enum ESoundType
     Dirt,
     Ball,
     Whistle,
-    Bird
+    Bird,
+    Dog
 }

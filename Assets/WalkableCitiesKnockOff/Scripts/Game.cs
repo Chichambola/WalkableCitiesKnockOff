@@ -28,8 +28,6 @@ public class Game : Singleton<Game>
     private Player _player;
     private Vector2 _startPosition = new (9999, 9999);
 
-    public static bool IsPaused => Mathf.Approximately(Time.timeScale, s_slowTime);
-
     private void Start()
     {
         PrimeTweenConfig.SetTweensCapacity(_tweenCapacity);
@@ -73,7 +71,7 @@ public class Game : Singleton<Game>
     }
 
     private void Restart() => RequestedRestart?.Invoke();
-    
+
     private void ProcessPlayer()
     {
         Resume();
@@ -81,8 +79,6 @@ public class Game : Singleton<Game>
         _player.Set(_startPosition);
         
         _player.ResetCharacteristics();
-        
-        _channel.Raise(_player);
     }
     
     private void CreatePlayer()
@@ -99,7 +95,10 @@ public class Game : Singleton<Game>
     
     private void OnAllScenesLoaded()
     {
-        ProcessPlayer();
+        if (_player != null)
+        {
+            ProcessPlayer();
+        }
         
         _player.Set(true);
         
