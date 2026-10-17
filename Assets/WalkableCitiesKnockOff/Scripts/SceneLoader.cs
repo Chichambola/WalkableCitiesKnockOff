@@ -17,6 +17,7 @@ public class SceneLoader : Singleton<SceneLoader>
     [SerializeField] private SceneGroup[] _sceneGroups;
 
     public static event Action Loaded;
+    public static event Action LoadedCurtain;
     
     private float _targetProgress;
     private int _currentSceneIndex;
@@ -71,6 +72,8 @@ public class SceneLoader : Singleton<SceneLoader>
     private async UniTask LoadNextScene()
     {
         await _canvasHandler.ChangeOpacity(1f);
+        
+        LoadedCurtain?.Invoke();
         
         await _groupHandler.UnloadScenes();
         
@@ -142,6 +145,8 @@ public class SceneLoader : Singleton<SceneLoader>
     private async void RestartActiveScene()
     {
         await _canvasHandler.ChangeOpacity(1f);
+
+        LoadedCurtain?.Invoke();
         
        await _groupHandler.RestartActiveScene();
        

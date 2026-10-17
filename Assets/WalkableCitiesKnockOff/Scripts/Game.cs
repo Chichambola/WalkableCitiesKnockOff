@@ -1,17 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using PrimeTween;
-using TMPro;
 using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEditor.Profiling;
-using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
+
 
 public class Game : Singleton<Game>
 {
@@ -42,6 +34,7 @@ public class Game : Singleton<Game>
         EndOfLevelHandler.RequestedEndOfLevel += LoadNextLevel;
         EndOfLevelHandler.DetectedPlayer += OnPlayerDetected;
         SceneLoader.Loaded += OnAllScenesLoaded;
+        SceneLoader.LoadedCurtain += ProcessPlayer;
     }
     
     private void OnDisable()
@@ -49,8 +42,18 @@ public class Game : Singleton<Game>
         _player.RequestedRestart -= Restart;
         EndOfLevelHandler.RequestedEndOfLevel -= LoadNextLevel;
         SceneLoader.Loaded -= OnAllScenesLoaded;
+        SceneLoader.LoadedCurtain -= ProcessPlayer;
     }
-    
+
+    private void ProcessPlayer()
+    {
+        Resume();
+        
+        _player.Set(_startPosition);
+        
+        _player.ResetCharacteristics();
+    }
+
     public static void Pause()
     {
         Time.timeScale = s_slowTime;
@@ -65,21 +68,10 @@ public class Game : Singleton<Game>
     {
         _player.Set(false);
         
-        ProcessPlayer();
-        
         RequestedNextLevel?.Invoke();
     }
 
     private void Restart() => RequestedRestart?.Invoke();
-
-    private void ProcessPlayer()
-    {
-        Resume();
-        
-        _player.Set(_startPosition);
-        
-        _player.ResetCharacteristics();
-    }
     
     private void CreatePlayer()
     {
@@ -95,11 +87,6 @@ public class Game : Singleton<Game>
     
     private void OnAllScenesLoaded()
     {
-        if (_player != null)
-        {
-            ProcessPlayer();
-        }
-        
         _player.Set(true);
         
         _channel.Raise(_player);

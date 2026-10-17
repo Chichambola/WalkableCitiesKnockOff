@@ -66,11 +66,10 @@ public class ScoreHandler : Singleton<ScoreHandler>
 
     private async UniTask OnRequestedNextLevel()
     {
-        Debug.Log(_currentStepCount);
+        Debug.Log($"Current: {_currentStepCount}\n" +
+                  $"Whole: {s_wholeStepAmount}");
         
         s_wholeStepAmount += _currentStepCount;
-        
-        Restore();
 
         _totalScore.enabled = false;
         

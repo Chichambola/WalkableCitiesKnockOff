@@ -169,7 +169,7 @@ MonoBehaviour:
   _type: 6
   _layerToIgnoreAfterHit:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 768
   _soundRequestChannel: {fileID: 11400000, guid: c7c870135597a1b4b9f61c2e1cabe339, type: 2}
 --- !u!114 &140657031139172071
 MonoBehaviour:

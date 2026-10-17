@@ -13,7 +13,7 @@ public class Rotator : MonoBehaviour
     [SerializeField] private int _stuckFramesThreshold = 10;
     [SerializeField] private Transform _rotatePoint;
 
-    private bool _isFlipped;
+    private bool _isFlipped = true;
     private int _spinDirection;
     private int _forward = 1;
     private int _backward = -1;
